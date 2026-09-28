@@ -15,7 +15,7 @@ import { pastContinuousQuestions } from '@/data/questions/pastContinuous';
 import { pastPerfectQuestions } from '@/data/questions/pastPerfect';
 import { pastPerfectContinuousQuestions } from '@/data/questions/pastPerfectContinuous';
 
-const errorBank: Record<TenseId, Question[]> = {
+const errorBank: Partial<Record<TenseId, Question[]>> = {
   // Present tenses
   simple: presentSimpleErrors,
   continuous: presentContinuousErrors,
@@ -28,7 +28,7 @@ const errorBank: Record<TenseId, Question[]> = {
   'past-perfect-continuous': pastPerfectContinuousQuestions.filter((q) => q.type === 'error-correction'),
 };
 
-const tenseNames: Record<TenseId, string> = {
+const tenseNames: Partial<Record<TenseId, string>> = {
   simple: 'Present Simple',
   continuous: 'Present Continuous',
   perfect: 'Present Perfect',
@@ -97,8 +97,8 @@ export default function ErrorsPage({ params }: { params: Promise<{ tenseId: stri
                 <p className="text-2xl font-bold">{correctCount}/{results.length}</p>
                 <p className="text-xs text-muted-foreground">Corrected</p>
               </div>
-              <div className="bg-emerald-500/10 rounded-2xl p-4">
-                <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+              <div className="bg-secondary/10 rounded-2xl p-4">
+                <p className="text-2xl font-bold text-secondary dark:text-secondary">
                   {Math.round((correctCount / results.length) * 100)}%
                 </p>
                 <p className="text-xs text-muted-foreground">Accuracy</p>
@@ -142,15 +142,15 @@ export default function ErrorsPage({ params }: { params: Promise<{ tenseId: stri
         </div>
 
         {/* Instructions */}
-        <div className="glass-card rounded-2xl p-4 border border-rose-500/20 bg-rose-500/5 mb-5">
-          <p className="text-sm text-rose-700 dark:text-rose-400">
+        <div className="glass-card rounded-2xl p-4 border border-primary/20 bg-primary/5 mb-5">
+          <p className="text-sm text-primary dark:text-primary">
             🔍 <strong>Task:</strong> Each sentence contains a grammar error. Find and correct it by typing the corrected sentence below.
           </p>
         </div>
 
         <div className="glass-card rounded-3xl p-7 border border-border mb-4">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs font-semibold text-rose-600 dark:text-rose-400 uppercase tracking-wider bg-rose-500/10 px-2.5 py-1 rounded-full">
+            <span className="text-xs font-semibold text-primary dark:text-primary uppercase tracking-wider bg-primary/10 px-2.5 py-1 rounded-full">
               Error Correction
             </span>
             <span className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground border border-border capitalize">
@@ -159,7 +159,7 @@ export default function ErrorsPage({ params }: { params: Promise<{ tenseId: stri
           </div>
 
           {/* Incorrect sentence */}
-          <div className="mb-5 p-4 bg-rose-500/5 border border-rose-500/20 rounded-xl">
+          <div className="mb-5 p-4 bg-primary/5 border border-primary/20 rounded-xl">
             <p className="text-base text-foreground font-medium">{question.question}</p>
           </div>
 
@@ -183,9 +183,9 @@ export default function ErrorsPage({ params }: { params: Promise<{ tenseId: stri
           {hintsShown > 0 && (
             <div className="space-y-2 mb-4 animate-fade-in">
               {hints.slice(0, hintsShown).map((hint, i) => (
-                <div key={i} className="flex items-start gap-2.5 p-3 bg-amber-500/5 border border-amber-500/15 rounded-xl">
-                  <Lightbulb size={14} className="text-amber-500 shrink-0 mt-0.5" />
-                  <p className="text-sm text-amber-700 dark:text-amber-400"><strong>Hint {i + 1}:</strong> {hint}</p>
+                <div key={i} className="flex items-start gap-2.5 p-3 bg-secondary/5 border border-secondary/15 rounded-xl">
+                  <Lightbulb size={14} className="text-secondary shrink-0 mt-0.5" />
+                  <p className="text-sm text-secondary dark:text-secondary"><strong>Hint {i + 1}:</strong> {hint}</p>
                 </div>
               ))}
             </div>
@@ -206,7 +206,7 @@ export default function ErrorsPage({ params }: { params: Promise<{ tenseId: stri
                   <button
                     id="error-hint-btn"
                     onClick={() => setHintsShown((h) => h + 1)}
-                    className="flex items-center gap-1.5 px-4 py-3 bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 rounded-xl text-sm font-medium hover:bg-amber-500/20 transition-all"
+                    className="flex items-center gap-1.5 px-4 py-3 bg-secondary/10 text-secondary dark:text-secondary border border-secondary/20 rounded-xl text-sm font-medium hover:bg-secondary/20 transition-all"
                   >
                     <Lightbulb size={14} /> Hint
                   </button>
@@ -228,24 +228,24 @@ export default function ErrorsPage({ params }: { params: Promise<{ tenseId: stri
         {/* Feedback */}
         {answered && (
           <div className={`glass-card rounded-3xl p-6 border animate-scale-in ${
-            isCorrect ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-amber-500/30 bg-amber-500/5'
+            isCorrect ? 'border-secondary/30 bg-secondary/5' : 'border-secondary/30 bg-secondary/5'
           }`}>
             <div className="flex items-start gap-3 mb-4">
               {isCorrect ? (
-                <CheckCircle size={20} className="text-emerald-500 shrink-0 mt-0.5" />
+                <CheckCircle size={20} className="text-secondary shrink-0 mt-0.5" />
               ) : (
-                <XCircle size={20} className="text-amber-500 shrink-0 mt-0.5" />
+                <XCircle size={20} className="text-secondary shrink-0 mt-0.5" />
               )}
               <div>
-                <h3 className={`font-bold ${isCorrect ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}`}>
+                <h3 className={`font-bold ${isCorrect ? 'text-secondary dark:text-secondary' : 'text-secondary dark:text-secondary'}`}>
                   {isCorrect ? '✅ Correct!' : '📝 See the Correct Version'}
                 </h3>
               </div>
             </div>
             <div className="space-y-3">
               {/* Corrected sentence */}
-              <div className="p-3 bg-emerald-500/5 border border-emerald-500/20 rounded-xl">
-                <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-1">✅ Correct Sentence</p>
+              <div className="p-3 bg-secondary/5 border border-secondary/20 rounded-xl">
+                <p className="text-xs font-semibold text-secondary dark:text-secondary uppercase tracking-wider mb-1">✅ Correct Sentence</p>
                 <p className="text-sm text-foreground font-medium">{question.correctAnswer}</p>
               </div>
               {/* Explanation */}
@@ -259,9 +259,9 @@ export default function ErrorsPage({ params }: { params: Promise<{ tenseId: stri
                 <code className="text-sm text-foreground font-mono">{question.grammarRule}</code>
               </div>
               {question.ieltsTip && (
-                <div className="p-3 bg-amber-500/5 border border-amber-500/15 rounded-xl">
-                  <p className="text-xs font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-1">🎓 IELTS Tip</p>
-                  <p className="text-sm text-amber-700 dark:text-amber-400 leading-relaxed">{question.ieltsTip}</p>
+                <div className="p-3 bg-secondary/5 border border-secondary/15 rounded-xl">
+                  <p className="text-xs font-semibold text-secondary dark:text-secondary uppercase tracking-wider mb-1">🎓 IELTS Tip</p>
+                  <p className="text-sm text-secondary dark:text-secondary leading-relaxed">{question.ieltsTip}</p>
                 </div>
               )}
             </div>

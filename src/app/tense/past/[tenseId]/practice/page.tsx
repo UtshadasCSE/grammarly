@@ -18,7 +18,7 @@ import { pastContinuousQuestions } from '@/data/questions/pastContinuous';
 import { pastPerfectQuestions } from '@/data/questions/pastPerfect';
 import { pastPerfectContinuousQuestions } from '@/data/questions/pastPerfectContinuous';
 
-const questionBank: Record<TenseId, Question[]> = {
+const questionBank: Partial<Record<TenseId, Question[]>> = {
   // Present tenses
   simple: presentSimpleQuestions.filter((q) => q.type === 'fill-blank'),
   continuous: presentContinuousQuestions.filter((q) => q.type === 'fill-blank'),
@@ -31,7 +31,7 @@ const questionBank: Record<TenseId, Question[]> = {
   'past-perfect-continuous': pastPerfectContinuousQuestions.filter((q) => q.type === 'fill-blank'),
 };
 
-const tenseNames: Record<TenseId, string> = {
+const tenseNames: Partial<Record<TenseId, string>> = {
   simple: 'Present Simple',
   continuous: 'Present Continuous',
   perfect: 'Present Perfect',
@@ -139,8 +139,8 @@ export default function PracticePage({ params }: { params: Promise<{ tenseId: st
                 <p className="text-2xl font-bold text-foreground">{results.length - correctCount}</p>
                 <p className="text-xs text-muted-foreground">Incorrect</p>
               </div>
-              <div className={`rounded-2xl p-4 ${accuracy >= 80 ? 'bg-emerald-500/10' : 'bg-amber-500/10'}`}>
-                <p className={`text-2xl font-bold ${accuracy >= 80 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}`}>
+              <div className={`rounded-2xl p-4 ${accuracy >= 80 ? 'bg-secondary/10' : 'bg-secondary/10'}`}>
+                <p className={`text-2xl font-bold ${accuracy >= 80 ? 'text-secondary dark:text-secondary' : 'text-secondary dark:text-secondary'}`}>
                   {accuracy}%
                 </p>
                 <p className="text-xs text-muted-foreground">Accuracy</p>
@@ -262,8 +262,8 @@ export default function PracticePage({ params }: { params: Promise<{ tenseId: st
                 const isCorrectOpt = opt === question.correctAnswer;
                 let cls = 'border-border bg-card text-foreground hover:border-primary/40';
                 if (answerState !== 'unanswered') {
-                  if (isCorrectOpt) cls = 'border-emerald-500 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300';
-                  else if (isSelected && !isCorrectOpt) cls = 'border-rose-500 bg-rose-500/10 text-rose-700 dark:text-rose-300';
+                  if (isCorrectOpt) cls = 'border-secondary bg-secondary/10 text-secondary dark:text-secondary';
+                  else if (isSelected && !isCorrectOpt) cls = 'border-primary bg-primary/10 text-primary dark:text-primary';
                   else cls = 'border-border bg-muted text-muted-foreground';
                 } else if (isSelected) {
                   cls = 'border-primary bg-primary/10 text-primary';
@@ -307,9 +307,9 @@ export default function PracticePage({ params }: { params: Promise<{ tenseId: st
           {hintsShown > 0 && (
             <div className="space-y-2 mb-4 animate-fade-in">
               {hints.slice(0, hintsShown).map((hint, i) => (
-                <div key={i} className="flex items-start gap-2.5 p-3 bg-amber-500/5 border border-amber-500/15 rounded-xl">
-                  <Lightbulb size={15} className="text-amber-500 shrink-0 mt-0.5" />
-                  <p className="text-sm text-amber-700 dark:text-amber-400">
+                <div key={i} className="flex items-start gap-2.5 p-3 bg-secondary/5 border border-secondary/15 rounded-xl">
+                  <Lightbulb size={15} className="text-secondary shrink-0 mt-0.5" />
+                  <p className="text-sm text-secondary dark:text-secondary">
                     <strong>Hint {i + 1}:</strong> {hint}
                   </p>
                 </div>
@@ -333,7 +333,7 @@ export default function PracticePage({ params }: { params: Promise<{ tenseId: st
                   <button
                     id="hint-btn"
                     onClick={showHint}
-                    className="flex items-center gap-1.5 px-4 py-3 bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 rounded-xl text-sm font-medium hover:bg-amber-500/20 transition-all duration-200"
+                    className="flex items-center gap-1.5 px-4 py-3 bg-secondary/10 text-secondary dark:text-secondary border border-secondary/20 rounded-xl text-sm font-medium hover:bg-secondary/20 transition-all duration-200"
                   >
                     <Lightbulb size={14} />
                     Hint {hintsShown + 1}/{hints.length}
@@ -359,24 +359,24 @@ export default function PracticePage({ params }: { params: Promise<{ tenseId: st
           <div
             className={`glass-card rounded-3xl p-6 border mb-4 animate-scale-in ${
               answerState === 'correct'
-                ? 'border-emerald-500/30 bg-emerald-500/5'
-                : 'border-rose-500/30 bg-rose-500/5'
+                ? 'border-secondary/30 bg-secondary/5'
+                : 'border-primary/30 bg-primary/5'
             }`}
           >
             <div className="flex items-start gap-3 mb-4">
               {answerState === 'correct' ? (
-                <CheckCircle size={22} className="text-emerald-500 shrink-0 mt-0.5" />
+                <CheckCircle size={22} className="text-secondary shrink-0 mt-0.5" />
               ) : (
-                <XCircle size={22} className="text-rose-500 shrink-0 mt-0.5" />
+                <XCircle size={22} className="text-primary shrink-0 mt-0.5" />
               )}
               <div>
-                <h3 className={`font-bold text-base ${answerState === 'correct' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+                <h3 className={`font-bold text-base ${answerState === 'correct' ? 'text-secondary dark:text-secondary' : 'text-primary dark:text-primary'}`}>
                   {answerState === 'correct' ? '✅ Correct!' : '❌ Incorrect'}
                 </h3>
                 {answerState === 'incorrect' && (
                   <p className="text-sm text-foreground mt-1">
                     <strong>Correct answer:</strong>{' '}
-                    <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{question.correctAnswer}</span>
+                    <span className="text-secondary dark:text-secondary font-semibold">{question.correctAnswer}</span>
                   </p>
                 )}
               </div>
@@ -395,13 +395,13 @@ export default function PracticePage({ params }: { params: Promise<{ tenseId: st
                 <button
                   id="ielts-tip-btn"
                   onClick={() => setShowIELTSTip(!showIELTSTip)}
-                  className="w-full text-left p-3 bg-amber-500/5 border border-amber-500/15 rounded-xl"
+                  className="w-full text-left p-3 bg-secondary/5 border border-secondary/15 rounded-xl"
                 >
-                  <p className="text-xs font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-1">
+                  <p className="text-xs font-semibold text-secondary dark:text-secondary uppercase tracking-wider mb-1">
                     🎓 IELTS Tip {showIELTSTip ? '▲' : '▼'}
                   </p>
                   {showIELTSTip && (
-                    <p className="text-sm text-amber-700 dark:text-amber-400 leading-relaxed">{question.ieltsTip}</p>
+                    <p className="text-sm text-secondary dark:text-secondary leading-relaxed">{question.ieltsTip}</p>
                   )}
                 </button>
               )}

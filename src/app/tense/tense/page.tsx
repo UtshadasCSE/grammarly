@@ -27,17 +27,17 @@ const categories = [
   {
     id: 'future',
     title: 'Future Tense',
-    description: 'Will, Going to, Future Continuous, and Future Perfect.',
+    description: 'Master Future Simple, Future Continuous, Future Perfect, and Future Perfect Continuous.',
     icon: '🟣',
-    active: false,
+    active: true,
     tenses: 4,
   },
   {
     id: 'mixed',
-    title: 'Mixed Tenses',
-    description: 'Practice all tenses in context with advanced IELTS exercises.',
+    title: 'IELTS Tense Mastery',
+    description: 'Practice all tenses in context with advanced IELTS exercises. Unlocks after completing Present, Past, and Future.',
     icon: '⭐',
-    active: false,
+    active: false, // We will dynamically set this below based on progress
     tenses: 6,
   },
 ];
@@ -47,13 +47,22 @@ export default function TenseCategoryPage() {
 
   const presentProgress =
     Object.values(progress.tenses)
-      .filter((t) => t.id && !t.id.startsWith('past')) // Simple check for present
+      .filter((t) => t.tenseId && ['simple', 'continuous', 'perfect', 'perfect-continuous'].includes(t.tenseId))
       .reduce((acc, t) => acc + t.overallProgress, 0) / 4;
 
   const pastProgress =
     Object.values(progress.tenses)
-      .filter((t) => t.id && t.id.startsWith('past')) // past tenses
+      .filter((t) => t.tenseId && t.tenseId.startsWith('past'))
       .reduce((acc, t) => acc + t.overallProgress, 0) / 4;
+
+  const futureProgress =
+    Object.values(progress.tenses)
+      .filter((t) => t.tenseId && t.tenseId.startsWith('future'))
+      .reduce((acc, t) => acc + t.overallProgress, 0) / 4;
+
+  const isMixedUnlocked = presentProgress === 100 && pastProgress === 100 && futureProgress === 100;
+  
+  const mixedProgress = progress.tenses['mixed']?.overallProgress ?? 0;
 
   return (
     <main className="min-h-screen hero-gradient flex flex-col items-center justify-center px-4 py-16">
@@ -80,9 +89,18 @@ export default function TenseCategoryPage() {
 
         {/* Category cards */}
         <div className="space-y-4">
-          {categories.map((cat) => (
+          {categories.map((cat) => {
+            const isActive = cat.id === 'mixed' ? isMixedUnlocked : cat.active;
+            
+            let catProgress = 0;
+            if (cat.id === 'present') catProgress = presentProgress;
+            else if (cat.id === 'past') catProgress = pastProgress;
+            else if (cat.id === 'future') catProgress = futureProgress;
+            else if (cat.id === 'mixed') catProgress = mixedProgress;
+
+            return (
             <div key={cat.id}>
-              {cat.active ? (
+              {isActive ? (
                 <Link
                   id={`tense-category-${cat.id}`}
                   href={`/tense/${cat.id}`}
@@ -94,7 +112,7 @@ export default function TenseCategoryPage() {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <h2 className="text-xl font-bold text-foreground">{cat.title}</h2>
-                          <span className="text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                          <span className="text-xs font-semibold bg-secondary/10 text-secondary dark:text-secondary px-2 py-0.5 rounded-full border border-secondary/20">
                             Active
                           </span>
                         </div>
@@ -102,7 +120,7 @@ export default function TenseCategoryPage() {
                           {cat.description}
                         </p>
                         <LinearProgress
-                          value={Math.round(cat.id === 'past' ? pastProgress : presentProgress)}
+                          value={Math.round(catProgress)}
                           label="Progress"
                           colorClass="progress-gradient"
                         />
@@ -122,7 +140,7 @@ export default function TenseCategoryPage() {
                         <div className="flex items-center gap-2 mb-1">
                           <h2 className="text-xl font-bold text-foreground">{cat.title}</h2>
                           <span className="text-xs font-semibold bg-muted text-muted-foreground px-2 py-0.5 rounded-full border border-border">
-                            Coming Soon
+                            {cat.id === 'mixed' ? 'Complete previous tenses' : 'Coming Soon'}
                           </span>
                         </div>
                         <p className="text-muted-foreground text-sm">{cat.description}</p>
@@ -133,7 +151,7 @@ export default function TenseCategoryPage() {
                 </div>
               )}
             </div>
-          ))}
+          )})}
         </div>
 
         <NavControls backHref="/tense" backLabel="Back to Topics" />

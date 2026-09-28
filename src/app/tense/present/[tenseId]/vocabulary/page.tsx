@@ -20,7 +20,7 @@ import {
   pastPerfectContinuousVocabulary,
 } from '@/data/vocabulary/pastTenseVocab';
 
-const vocabBank: Record<TenseId, VocabularyItem[]> = {
+const vocabBank: Partial<Record<TenseId, VocabularyItem[]>> = {
   // Present tenses
   simple: presentSimpleVocabulary,
   continuous: presentContinuousVocabulary,
@@ -33,7 +33,7 @@ const vocabBank: Record<TenseId, VocabularyItem[]> = {
   'past-perfect-continuous': pastPerfectContinuousVocabulary,
 };
 
-const tenseNames: Record<TenseId, string> = {
+const tenseNames: Partial<Record<TenseId, string>> = {
   simple: 'Present Simple',
   continuous: 'Present Continuous',
   perfect: 'Present Perfect',
@@ -62,7 +62,7 @@ function VocabCard({ item, onMastered, mastered }: {
 
   return (
     <div className={`glass-card rounded-2xl border overflow-hidden transition-all duration-300 ${
-      mastered ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-border'
+      mastered ? 'border-secondary/30 bg-secondary/5' : 'border-border'
     }`}>
       {/* Header */}
       <button
@@ -78,7 +78,7 @@ function VocabCard({ item, onMastered, mastered }: {
                 {item.partOfSpeech}
               </span>
               {mastered && (
-                <span className="text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                <span className="text-xs bg-secondary/10 text-secondary dark:text-secondary px-2 py-0.5 rounded-full border border-secondary/20">
                   ✓ Mastered
                 </span>
               )}
@@ -123,13 +123,13 @@ function VocabCard({ item, onMastered, mastered }: {
 
           {/* Synonyms & Antonyms */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="p-3 bg-emerald-500/5 border border-emerald-500/10 rounded-xl">
-              <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mb-1">Synonyms</p>
+            <div className="p-3 bg-secondary/5 border border-secondary/10 rounded-xl">
+              <p className="text-xs font-semibold text-secondary dark:text-secondary mb-1">Synonyms</p>
               <p className="text-xs text-foreground">{item.synonym}</p>
             </div>
             {item.antonym && (
-              <div className="p-3 bg-rose-500/5 border border-rose-500/10 rounded-xl">
-                <p className="text-xs font-semibold text-rose-600 dark:text-rose-400 mb-1">Antonyms</p>
+              <div className="p-3 bg-primary/5 border border-primary/10 rounded-xl">
+                <p className="text-xs font-semibold text-primary dark:text-primary mb-1">Antonyms</p>
                 <p className="text-xs text-foreground">{item.antonym}</p>
               </div>
             )}
@@ -143,8 +143,8 @@ function VocabCard({ item, onMastered, mastered }: {
                 <p className="text-xs font-medium text-muted-foreground mb-1">📚 Beginner</p>
                 <p className="text-sm text-foreground italic">"{item.beginnerExample}"</p>
               </div>
-              <div className="p-3 bg-amber-500/5 border border-amber-500/10 rounded-xl">
-                <p className="text-xs font-medium text-amber-600 dark:text-amber-400 mb-1">🎓 IELTS Example</p>
+              <div className="p-3 bg-secondary/5 border border-secondary/10 rounded-xl">
+                <p className="text-xs font-medium text-secondary dark:text-secondary mb-1">🎓 IELTS Example</p>
                 <p className="text-sm text-foreground italic">"{item.ieltsExample}"</p>
               </div>
             </div>
@@ -156,7 +156,7 @@ function VocabCard({ item, onMastered, mastered }: {
             onClick={() => onMastered(item.word)}
             className={`w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 ${
               mastered
-                ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+                ? 'bg-secondary/10 text-secondary dark:text-secondary border border-secondary/20'
                 : 'bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98]'
             }`}
           >

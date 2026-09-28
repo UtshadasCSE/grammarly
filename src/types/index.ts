@@ -8,8 +8,11 @@ export type PresentTenseId = 'simple' | 'continuous' | 'perfect' | 'perfect-cont
 // Past tense IDs (used in /tense/past/[tenseId])
 export type PastTenseId = 'past-simple' | 'past-continuous' | 'past-perfect' | 'past-perfect-continuous';
 
+// Future tense IDs
+export type FutureTenseId = 'future-simple' | 'future-continuous' | 'future-perfect' | 'future-perfect-continuous';
+
 // Union of all tense IDs for shared types (Question, VocabularyItem, SpeakingPrompt etc.)
-export type TenseId = PresentTenseId | PastTenseId;
+export type TenseId = PresentTenseId | PastTenseId | FutureTenseId | 'mixed';
 
 export type QuestionType =
   | 'fill-blank'
@@ -162,6 +165,7 @@ export interface UserProgress {
   totalXP: number;
   theme: 'light' | 'dark';
   language: 'en' | 'bn';
+  ieltsMastery?: IELTSMasteryProgress;
 }
 
 export interface RecordingMetadata {
@@ -173,4 +177,53 @@ export interface RecordingMetadata {
   blob?: Blob;
   url?: string;
   transcript?: string;
+}
+
+// IELTS Mastery Types
+export type IELTSLevel = 'beginner' | 'intermediate' | 'advanced';
+
+export interface IELTSQuestion {
+  id: string;
+  level: IELTSLevel;
+  type: 'multiple-choice' | 'fill-blank' | 'error-correction' | 'sentence-transformation' | 'writing' | 'speaking';
+  question: string;
+  options?: string[];
+  correctAnswer: string;
+  tense: TenseId;
+  explanation: string;
+  hint1?: string;
+  hint2?: string;
+  hint3?: string;
+}
+
+export interface IELTSChallenge {
+  id: string;
+  prompt: string;
+  hint: string;
+  expectedTense: TenseId | TenseId[];
+  modelAnswer: string;
+  explanation: string;
+}
+
+export interface IELTSLevelProgress {
+  completed: boolean;
+  questionsCompleted: number;
+  correctAnswers: number;
+  incorrectAnswers: number;
+  hintsUsed: number;
+  challengesCompleted: number;
+  score: number;
+}
+
+export interface IELTSErrorLog {
+  questionId: string;
+  userAnswer: string;
+  timestamp: string;
+}
+
+export interface IELTSMasteryProgress {
+  beginner: IELTSLevelProgress;
+  intermediate: IELTSLevelProgress;
+  advanced: IELTSLevelProgress;
+  errors: IELTSErrorLog[];
 }

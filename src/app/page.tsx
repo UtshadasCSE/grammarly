@@ -44,13 +44,13 @@ export default function HeroPage() {
         {/* Logo */}
         <div className="animate-fade-in delay-100 mb-6">
           <h1 className="text-5xl sm:text-7xl font-black tracking-tight">
-            <span className="bg-gradient-to-br from-primary via-accent to-primary bg-clip-text text-transparent">
+            <span className="text-primary">
               Grammarly
             </span>
           </h1>
           <div className="flex items-center justify-center gap-1 mt-2">
             {[...Array(5)].map((_, i) => (
-              <Star key={i} size={14} className="fill-amber-400 text-amber-400" />
+              <Star key={i} size={14} className="fill-amber-400 text-secondary" />
             ))}
             <span className="ml-2 text-sm text-muted-foreground font-medium">IELTS Grammar Practice</span>
           </div>

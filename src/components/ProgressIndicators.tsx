@@ -36,7 +36,7 @@ export function StageProgressBar({ currentStage, completedStages }: StageProgres
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
                     isCompleted
-                      ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30'
+                      ? 'bg-secondary text-white shadow-lg shadow-secondary/30'
                       : isCurrent
                       ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/30 ring-2 ring-primary/30 ring-offset-2 ring-offset-background'
                       : isLocked
@@ -54,7 +54,7 @@ export function StageProgressBar({ currentStage, completedStages }: StageProgres
                 </div>
                 <span
                   className={`text-[10px] font-medium whitespace-nowrap transition-colors ${
-                    isCurrent ? 'text-primary' : isCompleted ? 'text-emerald-500' : 'text-muted-foreground'
+                    isCurrent ? 'text-primary' : isCompleted ? 'text-secondary' : 'text-muted-foreground'
                   }`}
                 >
                   {stage.label}
@@ -63,7 +63,7 @@ export function StageProgressBar({ currentStage, completedStages }: StageProgres
               {idx < STAGES.length - 1 && (
                 <div
                   className={`h-0.5 w-6 mx-1 rounded-full transition-all duration-500 ${
-                    isCompleted ? 'bg-emerald-500' : 'bg-border'
+                    isCompleted ? 'bg-secondary' : 'bg-border'
                   }`}
                 />
               )}

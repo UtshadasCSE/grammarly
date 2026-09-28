@@ -30,6 +30,14 @@ const defaultTenseProgress = (tenseId: TenseId): TenseProgress => ({
   lastActiveAt: new Date().toISOString(),
 });
 
+
+const defaultIeltsProgress = (): import('@/types').IELTSMasteryProgress => ({
+  beginner: { completed: false, questionsCompleted: 0, correctAnswers: 0, incorrectAnswers: 0, hintsUsed: 0, challengesCompleted: 0, score: 0 },
+  intermediate: { completed: false, questionsCompleted: 0, correctAnswers: 0, incorrectAnswers: 0, hintsUsed: 0, challengesCompleted: 0, score: 0 },
+  advanced: { completed: false, questionsCompleted: 0, correctAnswers: 0, incorrectAnswers: 0, hintsUsed: 0, challengesCompleted: 0, score: 0 },
+  errors: []
+});
+
 const defaultProgress = (): UserProgress => ({
   tenses: {
     // Present tenses
@@ -42,15 +50,26 @@ const defaultProgress = (): UserProgress => ({
     'past-continuous': defaultTenseProgress('past-continuous'),
     'past-perfect': defaultTenseProgress('past-perfect'),
     'past-perfect-continuous': defaultTenseProgress('past-perfect-continuous'),
+    // Future tenses
+    'future-simple': defaultTenseProgress('future-simple'),
+    'future-continuous': defaultTenseProgress('future-continuous'),
+    'future-perfect': defaultTenseProgress('future-perfect'),
+    'future-perfect-continuous': defaultTenseProgress('future-perfect-continuous'),
+    // Mixed Tenses
+    'mixed': defaultTenseProgress('mixed'),
   } as Record<TenseId, TenseProgress>,
   streak: 0,
   lastLoginDate: new Date().toISOString().split('T')[0],
   totalXP: 0,
   theme: 'dark',
   language: 'en',
+  ieltsMastery: defaultIeltsProgress(),
 });
 
 interface ProgressContextType {
+  updateIELTSLevel: (level: 'beginner' | 'intermediate' | 'advanced', data: Partial<import('@/types').IELTSLevelProgress>) => void;
+  logIELTSError: (questionId: string, userAnswer: string) => void;
+  addXP: (amount: number) => void;
   progress: UserProgress;
   completeStage: (tenseId: TenseId, stageId: StageId, score?: number, accuracy?: number) => void;
   updateProgress: (tenseId: TenseId, overallProgress: number, accuracy?: number) => void;
@@ -243,6 +262,45 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     [progress]
   );
 
+  const updateIELTSLevel = useCallback((level: 'beginner' | 'intermediate' | 'advanced', data: Partial<import('@/types').IELTSLevelProgress>) => {
+    setProgress((prev) => {
+      const updated = { ...prev };
+      if (!updated.ieltsMastery) {
+         updated.ieltsMastery = {
+            beginner: { completed: false, questionsCompleted: 0, correctAnswers: 0, incorrectAnswers: 0, hintsUsed: 0, challengesCompleted: 0, score: 0 },
+            intermediate: { completed: false, questionsCompleted: 0, correctAnswers: 0, incorrectAnswers: 0, hintsUsed: 0, challengesCompleted: 0, score: 0 },
+            advanced: { completed: false, questionsCompleted: 0, correctAnswers: 0, incorrectAnswers: 0, hintsUsed: 0, challengesCompleted: 0, score: 0 },
+            errors: []
+         };
+      }
+      updated.ieltsMastery[level] = { ...updated.ieltsMastery[level], ...data };
+      return updated;
+    });
+  }, []);
+
+  const logIELTSError = useCallback((questionId: string, userAnswer: string) => {
+    setProgress((prev) => {
+      const updated = { ...prev };
+      if (!updated.ieltsMastery) {
+         updated.ieltsMastery = {
+            beginner: { completed: false, questionsCompleted: 0, correctAnswers: 0, incorrectAnswers: 0, hintsUsed: 0, challengesCompleted: 0, score: 0 },
+            intermediate: { completed: false, questionsCompleted: 0, correctAnswers: 0, incorrectAnswers: 0, hintsUsed: 0, challengesCompleted: 0, score: 0 },
+            advanced: { completed: false, questionsCompleted: 0, correctAnswers: 0, incorrectAnswers: 0, hintsUsed: 0, challengesCompleted: 0, score: 0 },
+            errors: []
+         };
+      }
+      updated.ieltsMastery.errors = [...updated.ieltsMastery.errors, { questionId, userAnswer, timestamp: new Date().toISOString() }];
+      return updated;
+    });
+  }, []);
+
+  const addXP = useCallback((amount: number) => {
+    setProgress((prev) => {
+      const updated = { ...prev, totalXP: (prev.totalXP || 0) + amount };
+      return updated;
+    });
+  }, []);
+
   const resetTense = useCallback(
     (tenseId: TenseId) => {
       save({
@@ -266,6 +324,9 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
         getTenseProgress,
         isStageUnlocked,
         resetTense,
+        updateIELTSLevel,
+        logIELTSError,
+        addXP,
       }}
     >
       {children}

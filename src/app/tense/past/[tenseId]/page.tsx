@@ -27,11 +27,11 @@ const tenseConfig: Partial<Record<TenseId, {
     banglaName: 'সাধারণ বর্তমান কাল',
     formula: 'Subject + V1 (s/es for he/she/it)',
     color: 'indigo',
-    gradientFrom: 'from-indigo-500',
-    gradientTo: 'to-blue-600',
-    textClass: 'text-indigo-600 dark:text-indigo-400',
-    bgClass: 'bg-indigo-500/10',
-    borderClass: 'border-indigo-500/20',
+    gradientFrom: 'bg-primary',
+    gradientTo: '',
+    textClass: 'text-primary dark:text-primary',
+    bgClass: 'bg-primary/10',
+    borderClass: 'border-primary/20',
     icon: '🔵',
     nextTense: 'continuous',
   },
@@ -40,11 +40,11 @@ const tenseConfig: Partial<Record<TenseId, {
     banglaName: 'চলমান বর্তমান কাল',
     formula: 'Subject + am/is/are + V-ing',
     color: 'emerald',
-    gradientFrom: 'from-emerald-500',
-    gradientTo: 'to-teal-600',
-    textClass: 'text-emerald-600 dark:text-emerald-400',
-    bgClass: 'bg-emerald-500/10',
-    borderClass: 'border-emerald-500/20',
+    gradientFrom: 'bg-primary',
+    gradientTo: '',
+    textClass: 'text-secondary dark:text-secondary',
+    bgClass: 'bg-secondary/10',
+    borderClass: 'border-secondary/20',
     icon: '🟢',
     nextTense: 'perfect',
   },
@@ -53,11 +53,11 @@ const tenseConfig: Partial<Record<TenseId, {
     banglaName: 'পুর্ণ বর্তমান কাল',
     formula: 'Subject + have/has + V3',
     color: 'violet',
-    gradientFrom: 'from-violet-500',
-    gradientTo: 'to-purple-600',
-    textClass: 'text-violet-600 dark:text-violet-400',
-    bgClass: 'bg-violet-500/10',
-    borderClass: 'border-violet-500/20',
+    gradientFrom: 'bg-primary',
+    gradientTo: '',
+    textClass: 'text-primary dark:text-primary',
+    bgClass: 'bg-primary/10',
+    borderClass: 'border-primary/20',
     icon: '🟣',
     nextTense: 'perfect-continuous',
   },
@@ -66,11 +66,11 @@ const tenseConfig: Partial<Record<TenseId, {
     banglaName: 'চলমান পুর্ণ বর্তমান কাল',
     formula: 'Subject + have/has + been + V-ing',
     color: 'rose',
-    gradientFrom: 'from-rose-500',
-    gradientTo: 'to-pink-600',
-    textClass: 'text-rose-600 dark:text-rose-400',
-    bgClass: 'bg-rose-500/10',
-    borderClass: 'border-rose-500/20',
+    gradientFrom: 'bg-primary',
+    gradientTo: '',
+    textClass: 'text-primary dark:text-primary',
+    bgClass: 'bg-primary/10',
+    borderClass: 'border-primary/20',
     icon: '🔴',
   },
   'past-simple': {
@@ -78,11 +78,11 @@ const tenseConfig: Partial<Record<TenseId, {
     banglaName: 'সাধারণ অতীত কাল',
     formula: 'Subject + V2',
     color: 'amber',
-    gradientFrom: 'from-amber-500',
-    gradientTo: 'to-orange-600',
-    textClass: 'text-amber-600 dark:text-amber-400',
-    bgClass: 'bg-amber-500/10',
-    borderClass: 'border-amber-500/20',
+    gradientFrom: 'bg-primary',
+    gradientTo: '',
+    textClass: 'text-secondary dark:text-secondary',
+    bgClass: 'bg-secondary/10',
+    borderClass: 'border-secondary/20',
     icon: '📅',
     nextTense: 'past-continuous',
   },
@@ -91,11 +91,11 @@ const tenseConfig: Partial<Record<TenseId, {
     banglaName: 'চলমান অতীত কাল',
     formula: 'Subject + was/were + V-ing',
     color: 'cyan',
-    gradientFrom: 'from-cyan-500',
-    gradientTo: 'to-blue-500',
-    textClass: 'text-cyan-600 dark:text-cyan-400',
-    bgClass: 'bg-cyan-500/10',
-    borderClass: 'border-cyan-500/20',
+    gradientFrom: 'bg-primary',
+    gradientTo: '',
+    textClass: 'text-primary dark:text-primary',
+    bgClass: 'bg-primary/10',
+    borderClass: 'border-primary/20',
     icon: '⏳',
     nextTense: 'past-perfect',
   },
@@ -104,8 +104,8 @@ const tenseConfig: Partial<Record<TenseId, {
     banglaName: 'পুরাঘটিত অতীত কাল',
     formula: 'Subject + had + V3',
     color: 'fuchsia',
-    gradientFrom: 'from-fuchsia-500',
-    gradientTo: 'to-purple-500',
+    gradientFrom: 'bg-primary',
+    gradientTo: '',
     textClass: 'text-fuchsia-600 dark:text-fuchsia-400',
     bgClass: 'bg-fuchsia-500/10',
     borderClass: 'border-fuchsia-500/20',
@@ -117,11 +117,11 @@ const tenseConfig: Partial<Record<TenseId, {
     banglaName: 'পুরাঘটিত চলমান অতীত কাল',
     formula: 'Subject + had + been + V-ing',
     color: 'rose',
-    gradientFrom: 'from-rose-500',
-    gradientTo: 'to-pink-500',
-    textClass: 'text-rose-600 dark:text-rose-400',
-    bgClass: 'bg-rose-500/10',
-    borderClass: 'border-rose-500/20',
+    gradientFrom: 'bg-primary',
+    gradientTo: '',
+    textClass: 'text-primary dark:text-primary',
+    bgClass: 'bg-primary/10',
+    borderClass: 'border-primary/20',
     icon: '🔄',
   },
 };
@@ -188,7 +188,7 @@ export default function TenseHubPage({ params }: { params: Promise<{ tenseId: st
                 <LinearProgress
                   value={tenseProgress?.overallProgress ?? 0}
                   label={`${tenseProgress?.overallProgress ?? 0}% Complete`}
-                  colorClass={`bg-gradient-to-r ${config.gradientFrom} ${config.gradientTo}`}
+                  colorClass={`bg-primary`}
                 />
               </div>
             </div>
@@ -211,7 +211,7 @@ export default function TenseHubPage({ params }: { params: Promise<{ tenseId: st
                     href={`/tense/past/${tId}/${stage.id}`}
                     className={`group glass-card rounded-2xl p-5 border transition-all duration-200 flex items-center gap-4 ${
                       isCompleted
-                        ? 'border-emerald-500/20 hover:border-emerald-500/40'
+                        ? 'border-secondary/20 hover:border-secondary/40'
                         : isCurrent
                         ? `${config.borderClass} hover:shadow-lg hover:shadow-primary/5`
                         : 'border-border hover:border-primary/20'
@@ -220,13 +220,13 @@ export default function TenseHubPage({ params }: { params: Promise<{ tenseId: st
                     {/* Status icon */}
                     <div className={`p-2.5 rounded-xl shrink-0 ${
                       isCompleted
-                        ? 'bg-emerald-500/10'
+                        ? 'bg-secondary/10'
                         : isCurrent
                         ? config.bgClass
                         : 'bg-muted'
                     }`}>
                       {isCompleted ? (
-                        <CheckCircle size={18} className="text-emerald-500" />
+                        <CheckCircle size={18} className="text-secondary" />
                       ) : (
                         <Icon size={18} className={isCurrent ? config.textClass : 'text-muted-foreground'} />
                       )}
@@ -235,7 +235,7 @@ export default function TenseHubPage({ params }: { params: Promise<{ tenseId: st
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className={`font-semibold text-sm ${isCompleted ? 'text-emerald-600 dark:text-emerald-400' : 'text-foreground'}`}>
+                        <span className={`font-semibold text-sm ${isCompleted ? 'text-secondary dark:text-secondary' : 'text-foreground'}`}>
                           {stage.label}
                         </span>
                         {isCurrent && (
@@ -244,7 +244,7 @@ export default function TenseHubPage({ params }: { params: Promise<{ tenseId: st
                           </span>
                         )}
                         {isCompleted && (
-                          <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-medium">
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-secondary/10 text-secondary dark:text-secondary border border-secondary/20 font-medium">
                             ✓ Done
                           </span>
                         )}
@@ -259,7 +259,7 @@ export default function TenseHubPage({ params }: { params: Promise<{ tenseId: st
 
                     <ChevronRight
                       size={16}
-                      className={`shrink-0 ${isCompleted ? 'text-emerald-500' : config.textClass} group-hover:translate-x-0.5 transition-transform`}
+                      className={`shrink-0 ${isCompleted ? 'text-secondary' : config.textClass} group-hover:translate-x-0.5 transition-transform`}
                     />
                   </Link>
                 ) : (

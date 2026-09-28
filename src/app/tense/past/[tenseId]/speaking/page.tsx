@@ -14,7 +14,7 @@ import type { SpeakingPrompt } from '@/types';
 // Merge all speaking prompts across both present and past
 const allSpeakingPrompts: SpeakingPrompt[] = [...speakingPrompts, ...pastSpeakingPrompts];
 
-const tenseNames: Record<TenseId, string> = {
+const tenseNames: Partial<Record<TenseId, string>> = {
   simple: 'Present Simple',
   continuous: 'Present Continuous',
   perfect: 'Present Perfect',
@@ -147,8 +147,8 @@ function VoiceRecorder({
 
   if (permissionDenied) {
     return (
-      <div className="p-4 bg-rose-500/5 border border-rose-500/20 rounded-xl">
-        <p className="text-sm text-rose-600 dark:text-rose-400">
+      <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl">
+        <p className="text-sm text-primary dark:text-primary">
           🎙️ Microphone access denied. Please allow microphone access in your browser settings and reload the page.
         </p>
       </div>
@@ -163,21 +163,21 @@ function VoiceRecorder({
 
       {/* Recording indicator */}
       {recordingState === 'recording' && (
-        <div className="flex items-center gap-3 mb-4 p-3 bg-rose-500/5 border border-rose-500/20 rounded-xl">
-          <div className="animate-recording w-3 h-3 bg-rose-500 rounded-full" />
-          <div className="recording-wave text-rose-500">
+        <div className="flex items-center gap-3 mb-4 p-3 bg-primary/5 border border-primary/20 rounded-xl">
+          <div className="animate-recording w-3 h-3 bg-primary rounded-full" />
+          <div className="recording-wave text-primary">
             <span /><span /><span /><span /><span />
           </div>
-          <span className="text-rose-600 dark:text-rose-400 font-mono text-sm font-bold">
+          <span className="text-primary dark:text-primary font-mono text-sm font-bold">
             {formatTime(duration)} Recording...
           </span>
         </div>
       )}
 
       {recordingState === 'paused' && (
-        <div className="flex items-center gap-3 mb-4 p-3 bg-amber-500/5 border border-amber-500/20 rounded-xl">
-          <Pause size={16} className="text-amber-500" />
-          <span className="text-amber-600 dark:text-amber-400 font-mono text-sm font-bold">
+        <div className="flex items-center gap-3 mb-4 p-3 bg-secondary/5 border border-secondary/20 rounded-xl">
+          <Pause size={16} className="text-secondary" />
+          <span className="text-secondary dark:text-secondary font-mono text-sm font-bold">
             {formatTime(duration)} — Paused
           </span>
         </div>
@@ -189,7 +189,7 @@ function VoiceRecorder({
           <button
             id="start-recording-btn"
             onClick={startRecording}
-            className="flex items-center gap-2 px-5 py-3 bg-rose-500 text-white rounded-xl font-semibold hover:bg-rose-600 hover:scale-105 active:scale-95 transition-all"
+            className="flex items-center gap-2 px-5 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary hover:scale-105 active:scale-95 transition-all"
           >
             <Mic size={16} /> Start Recording
           </button>
@@ -200,7 +200,7 @@ function VoiceRecorder({
             <button
               id="pause-recording-btn"
               onClick={pauseRecording}
-              className="flex items-center gap-2 px-4 py-3 bg-amber-500 text-white rounded-xl font-semibold hover:bg-amber-600 transition-all"
+              className="flex items-center gap-2 px-4 py-3 bg-secondary text-white rounded-xl font-semibold hover:bg-secondary transition-all"
             >
               <Pause size={15} /> Pause
             </button>
@@ -219,7 +219,7 @@ function VoiceRecorder({
             <button
               id="resume-recording-btn"
               onClick={resumeRecording}
-              className="flex items-center gap-2 px-4 py-3 bg-emerald-500 text-white rounded-xl font-semibold hover:bg-emerald-600 transition-all"
+              className="flex items-center gap-2 px-4 py-3 bg-secondary text-white rounded-xl font-semibold hover:bg-secondary transition-all"
             >
               <Play size={15} /> Resume
             </button>
@@ -237,8 +237,8 @@ function VoiceRecorder({
       {/* Audio preview */}
       {recordingState === 'stopped' && recording && (
         <div className="mt-4 space-y-3 animate-scale-in">
-          <div className="p-3 bg-emerald-500/5 border border-emerald-500/20 rounded-xl">
-            <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mb-2">▶ Preview Recording ({formatTime(recording.duration)})</p>
+          <div className="p-3 bg-secondary/5 border border-secondary/20 rounded-xl">
+            <p className="text-xs font-semibold text-secondary dark:text-secondary mb-2">▶ Preview Recording ({formatTime(recording.duration)})</p>
             <audio
               id="audio-preview"
               controls
@@ -258,14 +258,14 @@ function VoiceRecorder({
             <button
               id="delete-recording-btn"
               onClick={deleteRecording}
-              className="flex items-center gap-2 px-4 py-2.5 bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-xl text-sm font-medium border border-rose-500/20 hover:bg-rose-500/20 transition-all"
+              className="flex items-center gap-2 px-4 py-2.5 bg-primary/10 text-primary dark:text-primary rounded-xl text-sm font-medium border border-primary/20 hover:bg-primary/20 transition-all"
             >
               <Trash2 size={14} /> Delete
             </button>
             <button
               id="save-recording-btn"
               onClick={handleSave}
-              className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500 text-white rounded-xl text-sm font-semibold hover:bg-emerald-600 transition-all"
+              className="flex items-center gap-2 px-4 py-2.5 bg-secondary text-white rounded-xl text-sm font-semibold hover:bg-secondary transition-all"
             >
               <Save size={14} /> Save
             </button>
@@ -356,7 +356,7 @@ export default function SpeakingPage({ params }: { params: Promise<{ tenseId: st
                 i === currentIdx
                   ? 'bg-primary w-8'
                   : savedRecordings.has(i)
-                  ? 'bg-emerald-500 w-4'
+                  ? 'bg-secondary w-4'
                   : 'bg-muted w-4'
               }`}
             />
@@ -408,8 +408,8 @@ export default function SpeakingPage({ params }: { params: Promise<{ tenseId: st
 
         {/* Voice recorder */}
         {savedRecordings.has(currentIdx) ? (
-          <div className="glass-card rounded-2xl p-5 border border-emerald-500/20 bg-emerald-500/5 mb-5">
-            <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 mb-2">✅ Recording saved!</p>
+          <div className="glass-card rounded-2xl p-5 border border-secondary/20 bg-secondary/5 mb-5">
+            <p className="text-sm font-semibold text-secondary dark:text-secondary mb-2">✅ Recording saved!</p>
             <audio
               id={`saved-audio-${currentIdx}`}
               controls
@@ -454,7 +454,7 @@ export default function SpeakingPage({ params }: { params: Promise<{ tenseId: st
               id="complete-speaking-btn"
               href={`/tense/past/${tId}/writing`}
               onClick={handleComplete}
-              className="flex items-center gap-1.5 px-4 py-2.5 bg-emerald-500 text-white rounded-xl text-sm font-semibold hover:bg-emerald-600 transition-all"
+              className="flex items-center gap-1.5 px-4 py-2.5 bg-secondary text-white rounded-xl text-sm font-semibold hover:bg-secondary transition-all"
             >
               Continue to Writing <ChevronRight size={14} />
             </Link>

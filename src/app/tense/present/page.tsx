@@ -17,11 +17,11 @@ const tenseCards = [
     uses: ['habits', 'routines', 'facts', 'general truths', 'states', 'opinions', 'scheduled events'],
     difficulty: 'Beginner',
     color: 'indigo',
-    gradientFrom: 'from-indigo-500',
-    gradientTo: 'to-blue-600',
-    bgClass: 'bg-indigo-500/10 dark:bg-indigo-500/10',
-    textClass: 'text-indigo-600 dark:text-indigo-400',
-    borderClass: 'border-indigo-500/20',
+    gradientFrom: 'bg-primary',
+    gradientTo: '',
+    bgClass: 'bg-primary/10 dark:bg-primary/10',
+    textClass: 'text-primary dark:text-primary',
+    borderClass: 'border-primary/20',
     icon: '🔵',
   },
   {
@@ -32,11 +32,11 @@ const tenseCards = [
     uses: ['actions now', 'temporary situations', 'current trends', 'changing situations', 'future arrangements'],
     difficulty: 'Beginner',
     color: 'emerald',
-    gradientFrom: 'from-emerald-500',
-    gradientTo: 'to-teal-600',
-    bgClass: 'bg-emerald-500/10 dark:bg-emerald-500/10',
-    textClass: 'text-emerald-600 dark:text-emerald-400',
-    borderClass: 'border-emerald-500/20',
+    gradientFrom: 'bg-primary',
+    gradientTo: '',
+    bgClass: 'bg-secondary/10 dark:bg-secondary/10',
+    textClass: 'text-secondary dark:text-secondary',
+    borderClass: 'border-secondary/20',
     icon: '🟢',
   },
   {
@@ -47,11 +47,11 @@ const tenseCards = [
     uses: ['life experiences', 'recent actions', 'unfinished time', 'past-to-present connections', 'present results'],
     difficulty: 'Intermediate',
     color: 'violet',
-    gradientFrom: 'from-violet-500',
-    gradientTo: 'to-purple-600',
-    bgClass: 'bg-violet-500/10 dark:bg-violet-500/10',
-    textClass: 'text-violet-600 dark:text-violet-400',
-    borderClass: 'border-violet-500/20',
+    gradientFrom: 'bg-primary',
+    gradientTo: '',
+    bgClass: 'bg-primary/10 dark:bg-primary/10',
+    textClass: 'text-primary dark:text-primary',
+    borderClass: 'border-primary/20',
     icon: '🟣',
   },
   {
@@ -62,19 +62,19 @@ const tenseCards = [
     uses: ['duration', 'ongoing actions', 'recent activity', 'repeated ongoing actions', 'temporary situations'],
     difficulty: 'Advanced',
     color: 'rose',
-    gradientFrom: 'from-rose-500',
-    gradientTo: 'to-pink-600',
-    bgClass: 'bg-rose-500/10 dark:bg-rose-500/10',
-    textClass: 'text-rose-600 dark:text-rose-400',
-    borderClass: 'border-rose-500/20',
+    gradientFrom: 'bg-primary',
+    gradientTo: '',
+    bgClass: 'bg-primary/10 dark:bg-primary/10',
+    textClass: 'text-primary dark:text-primary',
+    borderClass: 'border-primary/20',
     icon: '🔴',
   },
 ];
 
 const difficultyColors: Record<string, string> = {
-  'Beginner': 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
-  'Intermediate': 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
-  'Advanced': 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+  'Beginner': 'bg-secondary/10 text-secondary dark:text-secondary border-secondary/20',
+  'Intermediate': 'bg-secondary/10 text-secondary dark:text-secondary border-secondary/20',
+  'Advanced': 'bg-primary/10 text-primary dark:text-primary border-primary/20',
 };
 
 export default function PresentTensePage() {
@@ -162,7 +162,7 @@ export default function PresentTensePage() {
                   </div>
                   <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                     <div
-                      className={`h-full bg-gradient-to-r ${tense.gradientFrom} ${tense.gradientTo} rounded-full transition-all duration-700`}
+                      className={`h-full bg-primary rounded-full transition-all duration-700`}
                       style={{ width: `${prog}%` }}
                     />
                   </div>

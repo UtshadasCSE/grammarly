@@ -8,7 +8,7 @@ import { StageProgressBar } from '@/components/ProgressIndicators';
 import { useProgress } from '@/contexts/ProgressContext';
 import type { TenseId } from '@/types';
 
-const tenseNames: Record<TenseId, string> = {
+const tenseNames: Partial<Record<TenseId, string>> = {
   simple: 'Present Simple',
   continuous: 'Present Continuous',
   perfect: 'Present Perfect',
@@ -20,7 +20,7 @@ const tenseNames: Record<TenseId, string> = {
 };
 
 // IELTS Context questions per tense (using the fill-blank questions with IELTS topics)
-const ieltsContextData: Record<TenseId, {
+const ieltsContextData: Partial<Record<TenseId, {
   question: string;
   context: string;
   topic: string;
@@ -28,7 +28,7 @@ const ieltsContextData: Record<TenseId, {
   options: string[];
   explanation: string;
   ieltsTip: string;
-}[]> = {
+}[]>> = {
   simple: [
     {
       question: 'Urban planning ______ a critical role in determining quality of life for millions of city dwellers worldwide.',
@@ -277,9 +277,7 @@ const ieltsContextData: Record<TenseId, {
       ieltsTip: 'PPC + "for" + duration + "by the time" = a highly precise IELTS grammatical combination that shows Band 8 range.',
     },
     {
-      question: 'Which sentence is grammatically most accurate for IELTS?
-
-"The poverty rate dropped dramatically in 2010. Before that, poverty had been increasing for many years."',
+      question: "Which sentence is grammatically most accurate for IELTS?\\n\\\"The poverty rate dropped dramatically in 2010. Before that, poverty had been increasing for many years.\\\"",
       context: 'IELTS Task 2 — Poverty Reduction',
       topic: 'Social Issues',
       correctAnswer: 'After years during which poverty had been rising steadily, the introduction of targeted welfare programmes in 2010 finally reversed the trend.',
@@ -354,8 +352,8 @@ export default function IELTSPage({ params }: { params: Promise<{ tenseId: strin
                 <p className="text-2xl font-bold">{correctCount}/{results.length}</p>
                 <p className="text-xs text-muted-foreground">Correct</p>
               </div>
-              <div className="bg-emerald-500/10 rounded-2xl p-4">
-                <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+              <div className="bg-secondary/10 rounded-2xl p-4">
+                <p className="text-2xl font-bold text-secondary dark:text-secondary">
                   {Math.round((correctCount / results.length) * 100)}%
                 </p>
                 <p className="text-xs text-muted-foreground">Accuracy</p>
@@ -395,16 +393,16 @@ export default function IELTSPage({ params }: { params: Promise<{ tenseId: strin
 
         {/* IELTS badge */}
         <div className="flex items-center gap-2 mb-5">
-          <span className="text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 rounded-full">
+          <span className="text-xs font-bold text-secondary dark:text-secondary bg-secondary/10 border border-secondary/20 px-3 py-1.5 rounded-full">
             🎓 IELTS-Style Practice — Not an official IELTS test
           </span>
           <span className="text-xs text-muted-foreground">{currentIdx + 1}/{questions.length}</span>
         </div>
 
-        <div className="glass-card rounded-3xl p-7 border border-amber-500/20 mb-4">
+        <div className="glass-card rounded-3xl p-7 border border-secondary/20 mb-4">
           {/* Context */}
-          <div className="mb-4 p-3 bg-amber-500/5 border border-amber-500/15 rounded-xl">
-            <p className="text-xs font-semibold text-amber-600 dark:text-amber-400 mb-1">📄 Context</p>
+          <div className="mb-4 p-3 bg-secondary/5 border border-secondary/15 rounded-xl">
+            <p className="text-xs font-semibold text-secondary dark:text-secondary mb-1">📄 Context</p>
             <p className="text-xs text-muted-foreground">{question.context}</p>
           </div>
 
@@ -420,13 +418,13 @@ export default function IELTSPage({ params }: { params: Promise<{ tenseId: strin
               const label = ['A', 'B', 'C', 'D'][i];
               const isSelected = selectedAnswer === opt;
               const isCorrectOpt = opt === question.correctAnswer;
-              let cls = 'border-border bg-card text-foreground hover:border-amber-500/40';
+              let cls = 'border-border bg-card text-foreground hover:border-secondary/40';
               if (answered) {
-                if (isCorrectOpt) cls = 'border-emerald-500 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300';
-                else if (isSelected) cls = 'border-rose-500 bg-rose-500/10 text-rose-700 dark:text-rose-300';
+                if (isCorrectOpt) cls = 'border-secondary bg-secondary/10 text-secondary dark:text-secondary';
+                else if (isSelected) cls = 'border-primary bg-primary/10 text-primary dark:text-primary';
                 else cls = 'border-border bg-muted text-muted-foreground';
               } else if (isSelected) {
-                cls = 'border-amber-500 bg-amber-500/10 text-amber-700 dark:text-amber-300';
+                cls = 'border-secondary bg-secondary/10 text-secondary dark:text-secondary';
               }
               return (
                 <button
@@ -437,9 +435,9 @@ export default function IELTSPage({ params }: { params: Promise<{ tenseId: strin
                   className={`w-full flex items-start gap-3 p-4 rounded-xl border-2 text-left transition-all duration-200 ${cls} ${!answered ? 'cursor-pointer hover:scale-[1.01]' : 'cursor-default'}`}
                 >
                   <span className={`text-xs font-bold px-2 py-0.5 rounded-lg shrink-0 mt-0.5 ${
-                    answered && isCorrectOpt ? 'bg-emerald-500 text-white' :
-                    answered && isSelected ? 'bg-rose-500 text-white' :
-                    isSelected ? 'bg-amber-500 text-white' : 'bg-muted text-muted-foreground'
+                    answered && isCorrectOpt ? 'bg-secondary text-white' :
+                    answered && isSelected ? 'bg-primary text-white' :
+                    isSelected ? 'bg-secondary text-white' : 'bg-muted text-muted-foreground'
                   }`}>{label}</span>
                   <span className="text-sm">{opt}</span>
                 </button>
@@ -453,7 +451,7 @@ export default function IELTSPage({ params }: { params: Promise<{ tenseId: strin
                 id="submit-ielts-btn"
                 onClick={handleSubmit}
                 disabled={!selectedAnswer}
-                className="flex-1 py-3 bg-amber-500 text-white rounded-xl font-semibold disabled:opacity-50 hover:bg-amber-600 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="flex-1 py-3 bg-secondary text-white rounded-xl font-semibold disabled:opacity-50 hover:bg-secondary transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 Check Answer
               </button>
@@ -471,9 +469,9 @@ export default function IELTSPage({ params }: { params: Promise<{ tenseId: strin
 
         {answered && (
           <div className={`glass-card rounded-3xl p-6 border animate-scale-in ${
-            selectedAnswer === question.correctAnswer ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-rose-500/30 bg-rose-500/5'
+            selectedAnswer === question.correctAnswer ? 'border-secondary/30 bg-secondary/5' : 'border-primary/30 bg-primary/5'
           }`}>
-            <h3 className={`font-bold mb-3 ${selectedAnswer === question.correctAnswer ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+            <h3 className={`font-bold mb-3 ${selectedAnswer === question.correctAnswer ? 'text-secondary dark:text-secondary' : 'text-primary dark:text-primary'}`}>
               {selectedAnswer === question.correctAnswer ? '✅ Excellent!' : `❌ Correct Answer: ${question.correctAnswer}`}
             </h3>
             <div className="space-y-3">
@@ -481,9 +479,9 @@ export default function IELTSPage({ params }: { params: Promise<{ tenseId: strin
                 <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-1">Explanation</p>
                 <p className="text-sm text-foreground leading-relaxed">{question.explanation}</p>
               </div>
-              <div className="p-3 bg-amber-500/5 border border-amber-500/15 rounded-xl">
-                <p className="text-xs font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-1">🎓 IELTS Tip</p>
-                <p className="text-sm text-amber-700 dark:text-amber-400 leading-relaxed">{question.ieltsTip}</p>
+              <div className="p-3 bg-secondary/5 border border-secondary/15 rounded-xl">
+                <p className="text-xs font-semibold text-secondary dark:text-secondary uppercase tracking-wider mb-1">🎓 IELTS Tip</p>
+                <p className="text-sm text-secondary dark:text-secondary leading-relaxed">{question.ieltsTip}</p>
               </div>
             </div>
           </div>

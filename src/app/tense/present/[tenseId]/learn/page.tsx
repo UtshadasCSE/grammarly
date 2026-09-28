@@ -18,7 +18,7 @@ import { pastPerfectLesson } from '@/data/lessons/pastPerfect';
 import { pastPerfectContinuousLesson } from '@/data/lessons/pastPerfectContinuous';
 import type { TenseLesson, SentencePart } from '@/types';
 
-const lessons: Record<TenseId, TenseLesson> = {
+const lessons: Partial<Record<TenseId, TenseLesson>> = {
   // Present tenses
   simple: presentSimpleLesson,
   continuous: presentContinuousLesson,
@@ -126,9 +126,9 @@ export default function LearnPage({ params }: { params: Promise<Params> }) {
   };
 
   const difficultyColors: Record<string, string> = {
-    Beginner: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
-    Intermediate: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
-    Advanced: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+    Beginner: 'bg-secondary/10 text-secondary dark:text-secondary border-secondary/20',
+    Intermediate: 'bg-secondary/10 text-secondary dark:text-secondary border-secondary/20',
+    Advanced: 'bg-primary/10 text-primary dark:text-primary border-primary/20',
   };
 
   return (
@@ -213,10 +213,10 @@ export default function LearnPage({ params }: { params: Promise<Params> }) {
           <div className="space-y-5">
             {/* Positive */}
             <div>
-              <h3 className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 mb-2">✅ Positive</h3>
+              <h3 className="text-sm font-semibold text-secondary dark:text-secondary mb-2">✅ Positive</h3>
               <div className="space-y-2">
                 {lesson.positiveExamples.map((ex) => (
-                  <div key={ex} className="bg-emerald-500/5 border border-emerald-500/10 rounded-xl px-4 py-2.5">
+                  <div key={ex} className="bg-secondary/5 border border-secondary/10 rounded-xl px-4 py-2.5">
                     <p className="text-sm text-foreground">{ex}</p>
                   </div>
                 ))}
@@ -224,10 +224,10 @@ export default function LearnPage({ params }: { params: Promise<Params> }) {
             </div>
             {/* Negative */}
             <div>
-              <h3 className="text-sm font-semibold text-rose-600 dark:text-rose-400 mb-2">❌ Negative</h3>
+              <h3 className="text-sm font-semibold text-primary dark:text-primary mb-2">❌ Negative</h3>
               <div className="space-y-2">
                 {lesson.negativeExamples.map((ex) => (
-                  <div key={ex} className="bg-rose-500/5 border border-rose-500/10 rounded-xl px-4 py-2.5">
+                  <div key={ex} className="bg-primary/5 border border-primary/10 rounded-xl px-4 py-2.5">
                     <p className="text-sm text-foreground">{ex}</p>
                   </div>
                 ))}
@@ -235,10 +235,10 @@ export default function LearnPage({ params }: { params: Promise<Params> }) {
             </div>
             {/* Questions */}
             <div>
-              <h3 className="text-sm font-semibold text-amber-600 dark:text-amber-400 mb-2">❓ Questions</h3>
+              <h3 className="text-sm font-semibold text-secondary dark:text-secondary mb-2">❓ Questions</h3>
               <div className="space-y-2">
                 {lesson.questionExamples.map((ex) => (
-                  <div key={ex} className="bg-amber-500/5 border border-amber-500/10 rounded-xl px-4 py-2.5">
+                  <div key={ex} className="bg-secondary/5 border border-secondary/10 rounded-xl px-4 py-2.5">
                     <p className="text-sm text-foreground">{ex}</p>
                   </div>
                 ))}
@@ -297,8 +297,8 @@ export default function LearnPage({ params }: { params: Promise<Params> }) {
               </span>
             ))}
           </div>
-          <div className="p-3 bg-amber-500/5 border border-amber-500/15 rounded-xl">
-            <p className="text-sm text-amber-700 dark:text-amber-400">
+          <div className="p-3 bg-secondary/5 border border-secondary/15 rounded-xl">
+            <p className="text-sm text-secondary dark:text-secondary">
               ⚠️ <strong>Note:</strong> {lesson.signalWordsNote}
             </p>
           </div>
@@ -314,7 +314,7 @@ export default function LearnPage({ params }: { params: Promise<Params> }) {
         </div>
 
         {/* Complete & Continue */}
-        <div className="glass-card rounded-3xl p-6 border border-emerald-500/20 bg-emerald-500/5">
+        <div className="glass-card rounded-3xl p-6 border border-secondary/20 bg-secondary/5">
           <div className="flex items-center justify-between gap-4">
             <div>
               <h3 className="font-bold text-foreground">Ready to Practice?</h3>
@@ -326,7 +326,7 @@ export default function LearnPage({ params }: { params: Promise<Params> }) {
               id="start-practice-btn"
               href={`/tense/present/${tId}/practice`}
               onClick={handleComplete}
-              className="flex items-center gap-2 px-5 py-3 bg-emerald-500 text-white rounded-xl font-semibold text-sm hover:bg-emerald-600 hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg shadow-emerald-500/25 shrink-0"
+              className="flex items-center gap-2 px-5 py-3 bg-secondary text-white rounded-xl font-semibold text-sm hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg shadow-secondary/25 shrink-0"
             >
               Start Practice
               <ChevronRight size={16} />

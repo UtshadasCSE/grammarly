@@ -6,7 +6,7 @@ import { ChevronRight, Trophy, Star, RotateCcw } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { StageProgressBar, LinearProgress } from '@/components/ProgressIndicators';
 import { useProgress } from '@/contexts/ProgressContext';
-import type { TenseId } from '@/types';
+import type { TenseId, Question } from '@/types';
 import { presentSimpleQuestions } from '@/data/questions/presentSimple';
 import { presentPerfectQuestions } from '@/data/questions/presentPerfect';
 import { presentContinuousQuestions, presentPerfectContinuousQuestions } from '@/data/questions/presentContinuousAndPPC';
@@ -15,7 +15,7 @@ import { pastContinuousQuestions } from '@/data/questions/pastContinuous';
 import { pastPerfectQuestions } from '@/data/questions/pastPerfect';
 import { pastPerfectContinuousQuestions } from '@/data/questions/pastPerfectContinuous';
 
-const tenseNames: Record<TenseId, string> = {
+const tenseNames: Partial<Record<TenseId, string>> = {
   simple: 'Present Simple',
   continuous: 'Present Continuous',
   perfect: 'Present Perfect',
@@ -26,7 +26,7 @@ const tenseNames: Record<TenseId, string> = {
   'past-perfect-continuous': 'Past Perfect Continuous',
 };
 
-const nextTense: Record<TenseId, TenseId | null> = {
+const nextTense: Partial<Record<TenseId, TenseId | null>> = {
   simple: 'continuous',
   continuous: 'perfect',
   perfect: 'perfect-continuous',
@@ -37,7 +37,7 @@ const nextTense: Record<TenseId, TenseId | null> = {
   'past-perfect-continuous': null,
 };
 
-const nextTenseNames: Record<TenseId, string> = {
+const nextTenseNames: Partial<Record<TenseId, string>> = {
   simple: 'Present Continuous',
   continuous: 'Present Perfect',
   perfect: 'Present Perfect Continuous',
@@ -69,7 +69,7 @@ function getTestQuestions(tId: TenseId): TestQuestion[] {
     'past-perfect-continuous': pastPerfectContinuousQuestions,
   };
 
-  const qs = allQuestions[tId] ?? [];
+  const qs: Question[] = (allQuestions as Record<string, Question[]>)[tId] ?? [];
   // Take first 10 fill-blank + mix of others
   const fillBlanks = qs.filter((q) => q.type === 'fill-blank').slice(0, 5);
 
@@ -145,7 +145,7 @@ export default function TestPage({ params }: { params: Promise<{ tenseId: string
                 <Star
                   key={i}
                   size={20}
-                  className={i < Math.ceil(accuracy / 20) ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground'}
+                  className={i < Math.ceil(accuracy / 20) ? 'fill-amber-400 text-secondary' : 'text-muted-foreground'}
                 />
               ))}
             </div>
@@ -159,8 +159,8 @@ export default function TestPage({ params }: { params: Promise<{ tenseId: string
                 <p className="text-2xl font-bold text-foreground">{correctCount}</p>
                 <p className="text-xs text-muted-foreground">Correct</p>
               </div>
-              <div className={`rounded-2xl p-4 ${accuracy >= 80 ? 'bg-emerald-500/10' : 'bg-amber-500/10'}`}>
-                <p className={`text-2xl font-bold ${accuracy >= 80 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}`}>
+              <div className={`rounded-2xl p-4 ${accuracy >= 80 ? 'bg-secondary/10' : 'bg-secondary/10'}`}>
+                <p className={`text-2xl font-bold ${accuracy >= 80 ? 'text-secondary dark:text-secondary' : 'text-secondary dark:text-secondary'}`}>
                   {accuracy}%
                 </p>
                 <p className="text-xs text-muted-foreground">Accuracy</p>
@@ -176,35 +176,35 @@ export default function TestPage({ params }: { params: Promise<{ tenseId: string
               <LinearProgress value={100} label="Course Complete" />
               <div className="grid grid-cols-2 gap-2 mt-4 text-sm">
                 <div className="flex items-center gap-2">
-                  <span className="text-emerald-500">✓</span>
+                  <span className="text-secondary">✓</span>
                   <span className="text-foreground">Grammar Lesson</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-emerald-500">✓</span>
+                  <span className="text-secondary">✓</span>
                   <span className="text-foreground">Fill-in-Blank</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-emerald-500">✓</span>
+                  <span className="text-secondary">✓</span>
                   <span className="text-foreground">Advanced MCQ</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-emerald-500">✓</span>
+                  <span className="text-secondary">✓</span>
                   <span className="text-foreground">Error Correction</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-emerald-500">✓</span>
+                  <span className="text-secondary">✓</span>
                   <span className="text-foreground">IELTS Context</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-emerald-500">✓</span>
+                  <span className="text-secondary">✓</span>
                   <span className="text-foreground">Vocabulary</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-emerald-500">✓</span>
+                  <span className="text-secondary">✓</span>
                   <span className="text-foreground">Speaking</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-emerald-500">✓</span>
+                  <span className="text-secondary">✓</span>
                   <span className="text-foreground">Writing</span>
                 </div>
               </div>
@@ -226,7 +226,7 @@ export default function TestPage({ params }: { params: Promise<{ tenseId: string
                 <Link
                   id="go-to-challenge-btn"
                   href="/tense/past/challenge"
-                  className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-amber-500 text-white rounded-xl font-bold hover:bg-amber-600 hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg"
+                  className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-secondary text-white rounded-xl font-bold hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg"
                 >
                   🏆 Mixed Present Tense Challenge
                   <ChevronRight size={16} />
@@ -260,7 +260,7 @@ export default function TestPage({ params }: { params: Promise<{ tenseId: string
         <ThemeToggle />
         <div className="w-full max-w-xl animate-scale-in">
           <div className="glass-card rounded-3xl p-10 border border-border text-center">
-            <Trophy size={48} className="text-amber-500 mx-auto mb-4" />
+            <Trophy size={48} className="text-secondary mx-auto mb-4" />
             <h1 className="text-3xl font-bold text-foreground mb-2">Final Test</h1>
             <p className="text-lg text-muted-foreground mb-2">{tenseNames[tId]}</p>
             <p className="text-sm text-muted-foreground mb-8">
@@ -318,7 +318,7 @@ export default function TestPage({ params }: { params: Promise<{ tenseId: string
 
         <div className="glass-card rounded-3xl p-7 border border-border mb-4">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full flex items-center gap-1">
+            <span className="text-xs font-semibold text-secondary dark:text-secondary bg-secondary/10 border border-secondary/20 px-3 py-1 rounded-full flex items-center gap-1">
               <Trophy size={12} /> Final Test
             </span>
             <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded-full border border-border capitalize">
@@ -333,13 +333,13 @@ export default function TestPage({ params }: { params: Promise<{ tenseId: string
               {question.options.map((opt, i) => {
                 const isSelected = selectedAnswer === opt;
                 const isCorrectOpt = opt === question.correctAnswer;
-                let cls = 'border-border bg-card text-foreground hover:border-amber-500/40';
+                let cls = 'border-border bg-card text-foreground hover:border-secondary/40';
                 if (answered) {
-                  if (isCorrectOpt) cls = 'border-emerald-500 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300';
-                  else if (isSelected) cls = 'border-rose-500 bg-rose-500/10 text-rose-700 dark:text-rose-300';
+                  if (isCorrectOpt) cls = 'border-secondary bg-secondary/10 text-secondary dark:text-secondary';
+                  else if (isSelected) cls = 'border-primary bg-primary/10 text-primary dark:text-primary';
                   else cls = 'border-border bg-muted text-muted-foreground';
                 } else if (isSelected) {
-                  cls = 'border-amber-500 bg-amber-500/10 text-amber-700 dark:text-amber-300';
+                  cls = 'border-secondary bg-secondary/10 text-secondary dark:text-secondary';
                 }
                 return (
                   <button
@@ -362,7 +362,7 @@ export default function TestPage({ params }: { params: Promise<{ tenseId: string
                 id="submit-test-btn"
                 onClick={handleSubmit}
                 disabled={!selectedAnswer}
-                className="flex-1 py-3 bg-amber-500 text-white rounded-xl font-semibold disabled:opacity-50 hover:bg-amber-600 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="flex-1 py-3 bg-secondary text-white rounded-xl font-semibold disabled:opacity-50 hover:bg-secondary transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 Submit Answer
               </button>
@@ -380,9 +380,9 @@ export default function TestPage({ params }: { params: Promise<{ tenseId: string
 
         {answered && (
           <div className={`glass-card rounded-3xl p-5 border animate-scale-in ${
-            selectedAnswer === question.correctAnswer ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-rose-500/30 bg-rose-500/5'
+            selectedAnswer === question.correctAnswer ? 'border-secondary/30 bg-secondary/5' : 'border-primary/30 bg-primary/5'
           }`}>
-            <h3 className={`font-bold mb-2 ${selectedAnswer === question.correctAnswer ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+            <h3 className={`font-bold mb-2 ${selectedAnswer === question.correctAnswer ? 'text-secondary dark:text-secondary' : 'text-primary dark:text-primary'}`}>
               {selectedAnswer === question.correctAnswer ? '✅ Correct!' : `❌ Correct: ${question.correctAnswer}`}
             </h3>
             <p className="text-sm text-foreground leading-relaxed">{question.explanation}</p>

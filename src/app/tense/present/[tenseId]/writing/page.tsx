@@ -14,7 +14,7 @@ import type { WritingTask } from '@/types';
 // Merge all writing tasks
 const allWritingTasks: WritingTask[] = [...writingTasks, ...pastWritingTasks];
 
-const tenseNames: Record<TenseId, string> = {
+const tenseNames: Partial<Record<TenseId, string>> = {
   simple: 'Present Simple',
   continuous: 'Present Continuous',
   perfect: 'Present Perfect',
@@ -152,7 +152,7 @@ export default function WritingPage({ params }: { params: Promise<{ tenseId: str
               onClick={() => { if (!submitted) { setCurrentIdx(i); setText(''); setFeedback(null); setShowSample(false); } }}
               className={`h-2 rounded-full transition-all duration-300 ${
                 i === currentIdx ? 'bg-primary w-8' :
-                completedTasks.includes(i) ? 'bg-emerald-500 w-4' : 'bg-muted w-4'
+                completedTasks.includes(i) ? 'bg-secondary w-4' : 'bg-muted w-4'
               }`}
             />
           ))}
@@ -196,7 +196,7 @@ export default function WritingPage({ params }: { params: Promise<{ tenseId: str
         <div className="glass-card rounded-3xl p-6 border border-border mb-4">
           <div className="flex items-center justify-between mb-3">
             <label className="text-sm font-semibold text-foreground">Your Response</label>
-            <span className={`text-xs font-mono ${wordCount >= wordLimit ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground'}`}>
+            <span className={`text-xs font-mono ${wordCount >= wordLimit ? 'text-secondary dark:text-secondary' : 'text-muted-foreground'}`}>
               {wordCount} / {wordLimit} words
             </span>
           </div>
@@ -246,17 +246,17 @@ export default function WritingPage({ params }: { params: Promise<{ tenseId: str
 
         {/* Feedback */}
         {submitted && feedback && (
-          <div className="glass-card rounded-3xl p-6 border border-emerald-500/20 bg-emerald-500/5 mb-5 animate-scale-in">
+          <div className="glass-card rounded-3xl p-6 border border-secondary/20 bg-secondary/5 mb-5 animate-scale-in">
             <div className="flex items-start gap-3 mb-4">
-              <CheckCircle size={20} className="text-emerald-500 shrink-0 mt-0.5" />
+              <CheckCircle size={20} className="text-secondary shrink-0 mt-0.5" />
               <div>
-                <h3 className="font-bold text-emerald-600 dark:text-emerald-400">Writing Submitted!</h3>
+                <h3 className="font-bold text-secondary dark:text-secondary">Writing Submitted!</h3>
                 <p className="text-sm text-muted-foreground mt-0.5">Practice Estimate (not an official IELTS score)</p>
               </div>
             </div>
 
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-16 h-16 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
+              <div className="w-16 h-16 rounded-full bg-secondary flex items-center justify-center shrink-0">
                 <span className="text-white font-bold text-xl">{feedback.score}</span>
               </div>
               <div>

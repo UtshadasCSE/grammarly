@@ -14,7 +14,7 @@ import { pastPerfectQuestions } from '@/data/questions/pastPerfect';
 import { pastPerfectContinuousQuestions } from '@/data/questions/pastPerfectContinuous';
 
 // Advanced MCQ questions per tense
-const mcqBank: Record<TenseId, Question[]> = {
+const mcqBank: Partial<Record<TenseId, Question[]>> = {
   // Present tenses
   simple: presentSimpleMCQ,
   continuous: presentSimpleMCQ.map((q) => ({ ...q, tense: 'continuous' as TenseId })), // reuse structure
@@ -27,7 +27,7 @@ const mcqBank: Record<TenseId, Question[]> = {
   'past-perfect-continuous': pastPerfectContinuousQuestions.filter((q) => q.type === 'multiple-choice' || q.type === 'error-correction'),
 };
 
-const tenseNames: Record<TenseId, string> = {
+const tenseNames: Partial<Record<TenseId, string>> = {
   simple: 'Present Simple',
   continuous: 'Present Continuous',
   perfect: 'Present Perfect',
@@ -98,8 +98,8 @@ export default function AdvancedPage({ params }: { params: Promise<{ tenseId: st
                 <p className="text-2xl font-bold text-foreground">{results.length - correctCount}</p>
                 <p className="text-xs text-muted-foreground">Incorrect</p>
               </div>
-              <div className={`rounded-2xl p-4 ${accuracy >= 80 ? 'bg-emerald-500/10' : 'bg-amber-500/10'}`}>
-                <p className={`text-2xl font-bold ${accuracy >= 80 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}`}>
+              <div className={`rounded-2xl p-4 ${accuracy >= 80 ? 'bg-secondary/10' : 'bg-secondary/10'}`}>
+                <p className={`text-2xl font-bold ${accuracy >= 80 ? 'text-secondary dark:text-secondary' : 'text-secondary dark:text-secondary'}`}>
                   {accuracy}%
                 </p>
                 <p className="text-xs text-muted-foreground">Accuracy</p>
@@ -147,7 +147,7 @@ export default function AdvancedPage({ params }: { params: Promise<{ tenseId: st
             <span className="text-xs font-semibold text-primary uppercase tracking-wider bg-primary/10 px-2.5 py-1 rounded-full">
               Advanced Multiple Choice
             </span>
-            <span className="text-xs px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 capitalize font-semibold">
+            <span className="text-xs px-2.5 py-1 rounded-full bg-primary/10 text-primary dark:text-primary border border-primary/20 capitalize font-semibold">
               {question.difficulty} / 10
             </span>
           </div>
@@ -162,8 +162,8 @@ export default function AdvancedPage({ params }: { params: Promise<{ tenseId: st
               const isCorrectOpt = opt === question.correctAnswer;
               let cls = 'border-border bg-card text-foreground hover:border-primary/40 hover:bg-primary/5';
               if (answered) {
-                if (isCorrectOpt) cls = 'border-emerald-500 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300';
-                else if (isSelected && !isCorrectOpt) cls = 'border-rose-500 bg-rose-500/10 text-rose-700 dark:text-rose-300';
+                if (isCorrectOpt) cls = 'border-secondary bg-secondary/10 text-secondary dark:text-secondary';
+                else if (isSelected && !isCorrectOpt) cls = 'border-primary bg-primary/10 text-primary dark:text-primary';
                 else cls = 'border-border bg-muted text-muted-foreground';
               } else if (isSelected) {
                 cls = 'border-primary bg-primary/10 text-primary';
@@ -177,8 +177,8 @@ export default function AdvancedPage({ params }: { params: Promise<{ tenseId: st
                   className={`w-full flex items-start gap-3 p-4 rounded-xl border-2 text-left transition-all duration-200 ${cls} ${!answered ? 'cursor-pointer hover:scale-[1.01] active:scale-[0.99]' : 'cursor-default'}`}
                 >
                   <span className={`text-xs font-bold px-2 py-0.5 rounded-lg shrink-0 mt-0.5 ${
-                    answered && isCorrectOpt ? 'bg-emerald-500 text-white' :
-                    answered && isSelected && !isCorrectOpt ? 'bg-rose-500 text-white' :
+                    answered && isCorrectOpt ? 'bg-secondary text-white' :
+                    answered && isSelected && !isCorrectOpt ? 'bg-primary text-white' :
                     isSelected ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
                   }`}>
                     {label}
@@ -192,9 +192,9 @@ export default function AdvancedPage({ params }: { params: Promise<{ tenseId: st
           {hintsShown > 0 && (
             <div className="space-y-2 mb-4 animate-fade-in">
               {hints.slice(0, hintsShown).map((hint, i) => (
-                <div key={i} className="flex items-start gap-2.5 p-3 bg-amber-500/5 border border-amber-500/15 rounded-xl">
-                  <Lightbulb size={14} className="text-amber-500 shrink-0 mt-0.5" />
-                  <p className="text-sm text-amber-700 dark:text-amber-400"><strong>Hint {i + 1}:</strong> {hint}</p>
+                <div key={i} className="flex items-start gap-2.5 p-3 bg-secondary/5 border border-secondary/15 rounded-xl">
+                  <Lightbulb size={14} className="text-secondary shrink-0 mt-0.5" />
+                  <p className="text-sm text-secondary dark:text-secondary"><strong>Hint {i + 1}:</strong> {hint}</p>
                 </div>
               ))}
             </div>
@@ -215,7 +215,7 @@ export default function AdvancedPage({ params }: { params: Promise<{ tenseId: st
                   <button
                     id="mcq-hint-btn"
                     onClick={() => setHintsShown((h) => h + 1)}
-                    className="flex items-center gap-1.5 px-4 py-3 bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 rounded-xl text-sm font-medium hover:bg-amber-500/20 transition-all"
+                    className="flex items-center gap-1.5 px-4 py-3 bg-secondary/10 text-secondary dark:text-secondary border border-secondary/20 rounded-xl text-sm font-medium hover:bg-secondary/20 transition-all"
                   >
                     <Lightbulb size={14} /> Hint
                   </button>
@@ -237,22 +237,22 @@ export default function AdvancedPage({ params }: { params: Promise<{ tenseId: st
         {answered && (
           <div className={`glass-card rounded-3xl p-6 border animate-scale-in ${
             selectedAnswer === question.correctAnswer
-              ? 'border-emerald-500/30 bg-emerald-500/5'
-              : 'border-rose-500/30 bg-rose-500/5'
+              ? 'border-secondary/30 bg-secondary/5'
+              : 'border-primary/30 bg-primary/5'
           }`}>
             <div className="flex items-start gap-3 mb-4">
               {selectedAnswer === question.correctAnswer ? (
-                <CheckCircle size={20} className="text-emerald-500 shrink-0 mt-0.5" />
+                <CheckCircle size={20} className="text-secondary shrink-0 mt-0.5" />
               ) : (
-                <XCircle size={20} className="text-rose-500 shrink-0 mt-0.5" />
+                <XCircle size={20} className="text-primary shrink-0 mt-0.5" />
               )}
               <div>
-                <h3 className={`font-bold ${selectedAnswer === question.correctAnswer ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+                <h3 className={`font-bold ${selectedAnswer === question.correctAnswer ? 'text-secondary dark:text-secondary' : 'text-primary dark:text-primary'}`}>
                   {selectedAnswer === question.correctAnswer ? '✅ Excellent!' : '❌ Not quite'}
                 </h3>
                 {selectedAnswer !== question.correctAnswer && (
                   <p className="text-sm text-foreground mt-1">
-                    <strong>Correct:</strong> <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{question.correctAnswer}</span>
+                    <strong>Correct:</strong> <span className="text-secondary dark:text-secondary font-semibold">{question.correctAnswer}</span>
                   </p>
                 )}
               </div>
@@ -266,13 +266,13 @@ export default function AdvancedPage({ params }: { params: Promise<{ tenseId: st
                 <button
                   id="mcq-ielts-tip-btn"
                   onClick={() => setShowIELTSTip(!showIELTSTip)}
-                  className="w-full text-left p-3 bg-amber-500/5 border border-amber-500/15 rounded-xl"
+                  className="w-full text-left p-3 bg-secondary/5 border border-secondary/15 rounded-xl"
                 >
-                  <p className="text-xs font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
+                  <p className="text-xs font-semibold text-secondary dark:text-secondary uppercase tracking-wider">
                     🎓 IELTS Tip {showIELTSTip ? '▲' : '▼'}
                   </p>
                   {showIELTSTip && (
-                    <p className="text-sm text-amber-700 dark:text-amber-400 leading-relaxed mt-1">{question.ieltsTip}</p>
+                    <p className="text-sm text-secondary dark:text-secondary leading-relaxed mt-1">{question.ieltsTip}</p>
                   )}
                 </button>
               )}

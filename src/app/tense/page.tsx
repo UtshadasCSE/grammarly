@@ -55,7 +55,7 @@ export default function TensePage() {
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <h2 className="text-2xl font-bold text-foreground">Tense</h2>
-                  <span className="text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                  <span className="text-xs font-semibold bg-secondary/10 text-secondary dark:text-secondary px-2 py-0.5 rounded-full border border-secondary/20">
                     Active
                   </span>
                 </div>
