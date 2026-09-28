@@ -115,7 +115,7 @@ export default function WritingPage({ params }: { params: Promise<{ tenseId: str
         <ThemeToggle />
         <div className="text-center space-y-4">
           <p className="text-muted-foreground">No writing tasks available.</p>
-          <Link href={`/tense/present/${tId}/test`} onClick={() => completeStage(tId, 'writing', 0, 0)} className="text-primary hover:underline">
+          <Link href={`/tense/past/${tId}/test`} onClick={() => completeStage(tId, 'writing', 0, 0)} className="text-primary hover:underline">
             Continue to Final Test →
           </Link>
         </div>
@@ -132,9 +132,9 @@ export default function WritingPage({ params }: { params: Promise<{ tenseId: str
       <div className="w-full max-w-2xl mx-auto animate-fade-in-up">
 
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6 flex-wrap">
-          <Link href="/tense/present" className="hover:text-foreground transition-colors">Present</Link>
+          <Link href="/tense/past" className="hover:text-foreground transition-colors">Past</Link>
           <ChevronRight size={14} />
-          <Link href={`/tense/present/${tId}`} className="hover:text-foreground transition-colors">{tenseNames[tId]}</Link>
+          <Link href={`/tense/past/${tId}`} className="hover:text-foreground transition-colors">{tenseNames[tId]}</Link>
           <ChevronRight size={14} />
           <span className="text-foreground font-medium">Writing</span>
         </div>
@@ -293,7 +293,7 @@ export default function WritingPage({ params }: { params: Promise<{ tenseId: str
         )}
 
         <div className="flex items-center mt-6 pt-4 border-t border-border">
-          <Link href={`/tense/present/${tId}/speaking`} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors group">
+          <Link href={`/tense/past/${tId}/speaking`} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors group">
             <ChevronLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" /> Back to Speaking
           </Link>
         </div>

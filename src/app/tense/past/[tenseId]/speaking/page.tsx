@@ -310,7 +310,7 @@ export default function SpeakingPage({ params }: { params: Promise<{ tenseId: st
         <ThemeToggle />
         <div className="text-center">
           <p className="text-muted-foreground">No speaking prompts available for this tense.</p>
-          <Link href={`/tense/present/${tId}/writing`} className="text-primary hover:underline mt-2 block">
+          <Link href={`/tense/past/${tId}/writing`} className="text-primary hover:underline mt-2 block">
             Continue to Writing →
           </Link>
         </div>
@@ -334,9 +334,9 @@ export default function SpeakingPage({ params }: { params: Promise<{ tenseId: st
       <div className="w-full max-w-2xl mx-auto animate-fade-in-up">
 
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6 flex-wrap">
-          <Link href="/tense/present" className="hover:text-foreground transition-colors">Present</Link>
+          <Link href="/tense/past" className="hover:text-foreground transition-colors">Past</Link>
           <ChevronRight size={14} />
-          <Link href={`/tense/present/${tId}`} className="hover:text-foreground transition-colors">{tenseNames[tId]}</Link>
+          <Link href={`/tense/past/${tId}`} className="hover:text-foreground transition-colors">{tenseNames[tId]}</Link>
           <ChevronRight size={14} />
           <span className="text-foreground font-medium">Speaking</span>
         </div>
@@ -452,7 +452,7 @@ export default function SpeakingPage({ params }: { params: Promise<{ tenseId: st
           ) : (
             <Link
               id="complete-speaking-btn"
-              href={`/tense/present/${tId}/writing`}
+              href={`/tense/past/${tId}/writing`}
               onClick={handleComplete}
               className="flex items-center gap-1.5 px-4 py-2.5 bg-emerald-500 text-white rounded-xl text-sm font-semibold hover:bg-emerald-600 transition-all"
             >
@@ -462,7 +462,7 @@ export default function SpeakingPage({ params }: { params: Promise<{ tenseId: st
         </div>
 
         <div className="flex items-center mt-6 pt-4 border-t border-border">
-          <Link href={`/tense/present/${tId}/vocabulary`} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors group">
+          <Link href={`/tense/past/${tId}/vocabulary`} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors group">
             <ChevronLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" /> Back to Vocabulary
           </Link>
         </div>

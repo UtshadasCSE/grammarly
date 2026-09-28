@@ -215,7 +215,7 @@ export default function TestPage({ params }: { params: Promise<{ tenseId: string
               {next && (
                 <Link
                   id="continue-next-tense-btn"
-                  href={`/tense/present/${next}`}
+                  href={`/tense/past/${next}`}
                   className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-primary text-primary-foreground rounded-xl font-bold hover:bg-primary/90 hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg"
                 >
                   Continue to {nextTenseNames[tId]}
@@ -225,7 +225,7 @@ export default function TestPage({ params }: { params: Promise<{ tenseId: string
               {!next && (
                 <Link
                   id="go-to-challenge-btn"
-                  href="/tense/present/challenge"
+                  href="/tense/past/challenge"
                   className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-amber-500 text-white rounded-xl font-bold hover:bg-amber-600 hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg"
                 >
                   🏆 Mixed Present Tense Challenge
@@ -241,7 +241,7 @@ export default function TestPage({ params }: { params: Promise<{ tenseId: string
                   <RotateCcw size={14} /> Retake
                 </button>
                 <Link
-                  href="/tense/present"
+                  href="/tense/past"
                   className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm text-muted-foreground hover:text-foreground transition-colors border border-border rounded-xl hover:bg-muted"
                 >
                   All Tenses
@@ -298,9 +298,9 @@ export default function TestPage({ params }: { params: Promise<{ tenseId: string
       <div className="w-full max-w-2xl mx-auto animate-fade-in-up">
 
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6 flex-wrap">
-          <Link href="/tense/present" className="hover:text-foreground transition-colors">Present</Link>
+          <Link href="/tense/past" className="hover:text-foreground transition-colors">Past</Link>
           <ChevronRight size={14} />
-          <Link href={`/tense/present/${tId}`} className="hover:text-foreground transition-colors">{tenseNames[tId]}</Link>
+          <Link href={`/tense/past/${tId}`} className="hover:text-foreground transition-colors">{tenseNames[tId]}</Link>
           <ChevronRight size={14} />
           <span className="text-foreground font-medium">Final Test</span>
         </div>

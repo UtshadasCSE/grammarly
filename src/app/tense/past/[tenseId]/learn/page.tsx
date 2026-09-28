@@ -139,9 +139,9 @@ export default function LearnPage({ params }: { params: Promise<Params> }) {
 
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6 flex-wrap">
-          <Link href="/tense/present" className="hover:text-foreground transition-colors">Present</Link>
+          <Link href="/tense/past" className="hover:text-foreground transition-colors">Past</Link>
           <ChevronRight size={14} />
-          <Link href={`/tense/present/${tId}`} className="hover:text-foreground transition-colors">{lesson.name}</Link>
+          <Link href={`/tense/past/${tId}`} className="hover:text-foreground transition-colors">{lesson.name}</Link>
           <ChevronRight size={14} />
           <span className="text-foreground font-medium">Learn</span>
         </div>
@@ -324,7 +324,7 @@ export default function LearnPage({ params }: { params: Promise<Params> }) {
             </div>
             <Link
               id="start-practice-btn"
-              href={`/tense/present/${tId}/practice`}
+              href={`/tense/past/${tId}/practice`}
               onClick={handleComplete}
               className="flex items-center gap-2 px-5 py-3 bg-emerald-500 text-white rounded-xl font-semibold text-sm hover:bg-emerald-600 hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg shadow-emerald-500/25 shrink-0"
             >
@@ -335,7 +335,7 @@ export default function LearnPage({ params }: { params: Promise<Params> }) {
         </div>
 
         <NavControls
-          backHref={`/tense/present/${tId}`}
+          backHref={`/tense/past/${tId}`}
           backLabel={`Back to ${lesson.name}`}
         />
       </div>

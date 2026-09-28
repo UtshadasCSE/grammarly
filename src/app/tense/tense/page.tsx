@@ -21,7 +21,7 @@ const categories = [
     title: 'Past Tense',
     description: 'Past Simple, Past Continuous, Past Perfect, and Past Perfect Continuous.',
     icon: '🔵',
-    active: false,
+    active: true,
     tenses: 4,
   },
   {
@@ -46,7 +46,14 @@ export default function TenseCategoryPage() {
   const { progress } = useProgress();
 
   const presentProgress =
-    Object.values(progress.tenses).reduce((acc, t) => acc + t.overallProgress, 0) / 4;
+    Object.values(progress.tenses)
+      .filter((t) => t.id && !t.id.startsWith('past')) // Simple check for present
+      .reduce((acc, t) => acc + t.overallProgress, 0) / 4;
+
+  const pastProgress =
+    Object.values(progress.tenses)
+      .filter((t) => t.id && t.id.startsWith('past')) // past tenses
+      .reduce((acc, t) => acc + t.overallProgress, 0) / 4;
 
   return (
     <main className="min-h-screen hero-gradient flex flex-col items-center justify-center px-4 py-16">
@@ -95,7 +102,7 @@ export default function TenseCategoryPage() {
                           {cat.description}
                         </p>
                         <LinearProgress
-                          value={Math.round(presentProgress)}
+                          value={Math.round(cat.id === 'past' ? pastProgress : presentProgress)}
                           label="Progress"
                           colorClass="progress-gradient"
                         />

@@ -2,7 +2,14 @@
 // Core Types for Grammarly IELTS Application
 // ============================================================
 
-export type TenseId = 'simple' | 'continuous' | 'perfect' | 'perfect-continuous';
+// Present tense IDs (used in /tense/present/[tenseId])
+export type PresentTenseId = 'simple' | 'continuous' | 'perfect' | 'perfect-continuous';
+
+// Past tense IDs (used in /tense/past/[tenseId])
+export type PastTenseId = 'past-simple' | 'past-continuous' | 'past-perfect' | 'past-perfect-continuous';
+
+// Union of all tense IDs for shared types (Question, VocabularyItem, SpeakingPrompt etc.)
+export type TenseId = PresentTenseId | PastTenseId;
 
 export type QuestionType =
   | 'fill-blank'

@@ -42,7 +42,7 @@ export default function TensePage() {
         {/* Topic Card */}
         <Link
           id="tense-topic-card"
-          href="/tense/present"
+          href="/tense/tense"
           className="group block glass-card rounded-3xl p-8 border border-border hover:border-primary/40 hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 hover:-translate-y-1"
         >
           <div className="flex items-start justify-between gap-4">
@@ -73,18 +73,21 @@ export default function TensePage() {
                 </div>
 
                 <div className="flex flex-wrap gap-2 mt-4">
-                  {['Present Tense', 'Past Tense', 'Future Tense', 'Mixed'].map((tag, i) => (
-                    <span
-                      key={tag}
-                      className={`text-xs px-2.5 py-1 rounded-full font-medium ${
-                        i === 0
-                          ? 'bg-primary/10 text-primary border border-primary/20'
-                          : 'bg-muted text-muted-foreground border border-border'
-                      }`}
-                    >
-                      {i === 0 ? '● ' : ''}{tag}
-                    </span>
-                  ))}
+                  {['Present Tense', 'Past Tense', 'Future Tense', 'Mixed'].map((tag, i) => {
+                    const isActive = i === 0 || i === 1; // Present and Past active
+                    return (
+                      <span
+                        key={tag}
+                        className={`text-xs px-2.5 py-1 rounded-full font-medium ${
+                          isActive
+                            ? 'bg-primary/10 text-primary border border-primary/20'
+                            : 'bg-muted text-muted-foreground border border-border'
+                        }`}
+                      >
+                        {isActive ? '● ' : ''}{tag}
+                      </span>
+                    );
+                  })}
                 </div>
               </div>
             </div>

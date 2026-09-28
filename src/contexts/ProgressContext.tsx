@@ -32,11 +32,17 @@ const defaultTenseProgress = (tenseId: TenseId): TenseProgress => ({
 
 const defaultProgress = (): UserProgress => ({
   tenses: {
+    // Present tenses
     simple: defaultTenseProgress('simple'),
     continuous: defaultTenseProgress('continuous'),
     perfect: defaultTenseProgress('perfect'),
     'perfect-continuous': defaultTenseProgress('perfect-continuous'),
-  },
+    // Past tenses
+    'past-simple': defaultTenseProgress('past-simple'),
+    'past-continuous': defaultTenseProgress('past-continuous'),
+    'past-perfect': defaultTenseProgress('past-perfect'),
+    'past-perfect-continuous': defaultTenseProgress('past-perfect-continuous'),
+  } as Record<TenseId, TenseProgress>,
   streak: 0,
   lastLoginDate: new Date().toISOString().split('T')[0],
   totalXP: 0,
@@ -75,9 +81,18 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored) as UserProgress;
-        setProgress(parsed);
+        // Merge with defaults to ensure new tense IDs are always initialized
+        const merged: UserProgress = {
+          ...defaultProgress(),
+          ...parsed,
+          tenses: {
+            ...defaultProgress().tenses,
+            ...parsed.tenses,
+          },
+        };
+        setProgress(merged);
         // Apply saved theme
-        if (parsed.theme === 'dark') {
+        if (merged.theme === 'dark') {
           document.documentElement.classList.add('dark');
         } else {
           document.documentElement.classList.remove('dark');

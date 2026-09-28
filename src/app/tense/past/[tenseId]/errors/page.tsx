@@ -106,7 +106,7 @@ export default function ErrorsPage({ params }: { params: Promise<{ tenseId: stri
             </div>
             <Link
               id="continue-to-ielts-btn"
-              href={`/tense/present/${tId}/ielts`}
+              href={`/tense/past/${tId}/ielts`}
               className="flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-xl font-semibold hover:bg-primary/90 hover:scale-105 active:scale-95 transition-all duration-200"
             >
               Continue to IELTS Context <ChevronRight size={16} />
@@ -126,9 +126,9 @@ export default function ErrorsPage({ params }: { params: Promise<{ tenseId: stri
       <div className="w-full max-w-2xl mx-auto animate-fade-in-up">
 
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6 flex-wrap">
-          <Link href="/tense/present" className="hover:text-foreground transition-colors">Present</Link>
+          <Link href="/tense/past" className="hover:text-foreground transition-colors">Past</Link>
           <ChevronRight size={14} />
-          <Link href={`/tense/present/${tId}`} className="hover:text-foreground transition-colors">{tenseNames[tId]}</Link>
+          <Link href={`/tense/past/${tId}`} className="hover:text-foreground transition-colors">{tenseNames[tId]}</Link>
           <ChevronRight size={14} />
           <span className="text-foreground font-medium">Error Correction</span>
         </div>
@@ -269,7 +269,7 @@ export default function ErrorsPage({ params }: { params: Promise<{ tenseId: stri
         )}
 
         <div className="flex items-center justify-between mt-6 pt-4 border-t border-border">
-          <Link href={`/tense/present/${tId}/advanced`} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors group">
+          <Link href={`/tense/past/${tId}/advanced`} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors group">
             <ChevronLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" /> Back to Advanced MCQ
           </Link>
         </div>

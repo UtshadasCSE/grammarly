@@ -149,13 +149,13 @@ export default function PracticePage({ params }: { params: Promise<{ tenseId: st
             <div className="flex flex-col gap-3">
               <Link
                 id="continue-to-advanced-btn"
-                href={`/tense/present/${tId}/advanced`}
+                href={`/tense/past/${tId}/advanced`}
                 className="flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-xl font-semibold hover:bg-primary/90 hover:scale-105 active:scale-95 transition-all duration-200"
               >
                 Continue to Advanced MCQ <ChevronRight size={16} />
               </Link>
               <Link
-                href={`/tense/present/${tId}`}
+                href={`/tense/past/${tId}`}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors text-center"
               >
                 Back to tense overview
@@ -184,9 +184,9 @@ export default function PracticePage({ params }: { params: Promise<{ tenseId: st
 
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6 flex-wrap">
-          <Link href="/tense/present" className="hover:text-foreground transition-colors">Present</Link>
+          <Link href="/tense/past" className="hover:text-foreground transition-colors">Past</Link>
           <ChevronRight size={14} />
-          <Link href={`/tense/present/${tId}`} className="hover:text-foreground transition-colors">{tenseNames[tId]}</Link>
+          <Link href={`/tense/past/${tId}`} className="hover:text-foreground transition-colors">{tenseNames[tId]}</Link>
           <ChevronRight size={14} />
           <span className="text-foreground font-medium">Practice</span>
         </div>
@@ -413,7 +413,7 @@ export default function PracticePage({ params }: { params: Promise<{ tenseId: st
         <div className="flex items-center justify-between mt-6 pt-4 border-t border-border">
           <Link
             id="back-to-learn-btn"
-            href={`/tense/present/${tId}/learn`}
+            href={`/tense/past/${tId}/learn`}
             className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
           >
             <ChevronLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
@@ -429,7 +429,7 @@ export default function PracticePage({ params }: { params: Promise<{ tenseId: st
               }}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              <Link href={`/tense/present/${tId}/advanced`}>Skip to Advanced →</Link>
+              <Link href={`/tense/past/${tId}/advanced`}>Skip to Advanced →</Link>
             </button>
           )}
         </div>

@@ -58,14 +58,14 @@ export default function HeroPage() {
 
         {/* Main heading */}
         <h2 className="animate-fade-in delay-200 text-3xl sm:text-5xl font-bold tracking-tight text-foreground leading-tight mb-5">
-          Master English Tenses
+          Master English Grammar
           <br />
           <span className="text-primary">for IELTS</span>
         </h2>
 
         {/* Supporting text */}
         <p className="animate-fade-in delay-300 text-base sm:text-lg text-muted-foreground max-w-2xl leading-relaxed mb-10">
-          Practice grammar, vocabulary, speaking, and writing from beginner to advanced level 
+          Practice grammar, vocabulary, speaking, and writing from beginner to advanced level
           with structured IELTS-style exercises.
         </p>
 
