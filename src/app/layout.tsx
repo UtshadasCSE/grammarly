@@ -23,8 +23,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${poppins.variable} antialiased min-h-screen`}>
+    <html lang="en" suppressHydrationWarning className={`${poppins.variable}`}>
+      <body className="font-sans antialiased min-h-screen">
         <ProgressProvider>{children}</ProgressProvider>
       </body>
     </html>
