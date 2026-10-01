@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import type { UserProgress, TenseId, StageId, TenseProgress } from '@/types';
+import type { UserProgress, TenseId, StageId, TenseProgress, PartOfSpeechId, PartOfSpeechProgress } from '@/types';
 
 const STORAGE_KEY = 'grammarly_ielts_progress';
 
@@ -30,6 +30,19 @@ const defaultTenseProgress = (tenseId: TenseId): TenseProgress => ({
   lastActiveAt: new Date().toISOString(),
 });
 
+const defaultPartOfSpeechProgress = (posId: PartOfSpeechId): PartOfSpeechProgress => ({
+  id: posId,
+  currentStage: 'learn',
+  stages: defaultStages(),
+  overallProgress: 0,
+  totalAccuracy: 0,
+  vocabMastered: [],
+  speakingAttempts: 0,
+  writingSubmissions: 0,
+  startedAt: new Date().toISOString(),
+  lastActiveAt: new Date().toISOString(),
+  weakAreas: [],
+});
 
 const defaultIeltsProgress = (): import('@/types').IELTSMasteryProgress => ({
   beginner: { completed: false, questionsCompleted: 0, correctAnswers: 0, incorrectAnswers: 0, hintsUsed: 0, challengesCompleted: 0, score: 0 },
@@ -58,6 +71,13 @@ const defaultProgress = (): UserProgress => ({
     // Mixed Tenses
     'mixed': defaultTenseProgress('mixed'),
   } as Record<TenseId, TenseProgress>,
+  partsOfSpeech: {
+    noun: defaultPartOfSpeechProgress('noun'),
+    pronoun: defaultPartOfSpeechProgress('pronoun'),
+    verb: defaultPartOfSpeechProgress('verb'),
+    adjective: defaultPartOfSpeechProgress('adjective'),
+    adverb: defaultPartOfSpeechProgress('adverb'),
+  },
   streak: 0,
   lastLoginDate: new Date().toISOString().split('T')[0],
   totalXP: 0,
@@ -80,13 +100,22 @@ interface ProgressContextType {
   getTenseProgress: (tenseId: TenseId) => TenseProgress;
   isStageUnlocked: (tenseId: TenseId, stageId: StageId) => boolean;
   resetTense: (tenseId: TenseId) => void;
+  // Parts of Speech methods
+  getPartOfSpeechProgress: (posId: PartOfSpeechId) => PartOfSpeechProgress;
+  completePartOfSpeechStage: (posId: PartOfSpeechId, stageId: StageId, score?: number, accuracy?: number) => void;
+  isPartOfSpeechStageUnlocked: (posId: PartOfSpeechId, stageId: StageId) => boolean;
+  addPartOfSpeechVocabMastered: (posId: PartOfSpeechId, word: string) => void;
+  incrementPartOfSpeechSpeaking: (posId: PartOfSpeechId) => void;
+  incrementPartOfSpeechWriting: (posId: PartOfSpeechId) => void;
+  recordPartOfSpeechWeakArea: (posId: PartOfSpeechId, weakArea: string) => void;
+  resetPartOfSpeech: (posId: PartOfSpeechId) => void;
 }
 
 const ProgressContext = createContext<ProgressContextType | null>(null);
 
 const STAGE_ORDER: StageId[] = ['learn', 'practice', 'advanced', 'errors', 'ielts', 'vocabulary', 'speaking', 'writing', 'test'];
 
-function calculateOverallProgress(stages: TenseProgress['stages']): number {
+function calculateOverallProgress(stages: Record<StageId, { completed: boolean }>): number {
   const completed = STAGE_ORDER.filter((s) => stages[s]?.completed).length;
   return Math.round((completed / STAGE_ORDER.length) * 100);
 }
@@ -100,13 +129,17 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored) as UserProgress;
-        // Merge with defaults to ensure new tense IDs are always initialized
+        // Merge with defaults to ensure new IDs are always initialized
         const merged: UserProgress = {
           ...defaultProgress(),
           ...parsed,
           tenses: {
             ...defaultProgress().tenses,
-            ...parsed.tenses,
+            ...(parsed.tenses || {}),
+          },
+          partsOfSpeech: {
+            ...defaultProgress().partsOfSpeech,
+            ...(parsed.partsOfSpeech || {}),
           },
         };
         setProgress(merged);
@@ -138,7 +171,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const completeStage = useCallback(
     (tenseId: TenseId, stageId: StageId, score?: number, accuracy?: number) => {
       setProgress((prev) => {
-        const tense = { ...prev.tenses[tenseId] };
+        const tense = { ...(prev.tenses[tenseId] || defaultTenseProgress(tenseId)) };
         tense.stages = {
           ...tense.stages,
           [stageId]: {
@@ -161,7 +194,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
         const updated: UserProgress = {
           ...prev,
           tenses: { ...prev.tenses, [tenseId]: tense },
-          totalXP: prev.totalXP + 10,
+          totalXP: (prev.totalXP || 0) + 10,
         };
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
@@ -177,7 +210,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const updateProgress = useCallback(
     (tenseId: TenseId, overallProgress: number, accuracy?: number) => {
       setProgress((prev) => {
-        const tense = { ...prev.tenses[tenseId], overallProgress, lastActiveAt: new Date().toISOString() };
+        const tense = { ...(prev.tenses[tenseId] || defaultTenseProgress(tenseId)), overallProgress, lastActiveAt: new Date().toISOString() };
         if (accuracy !== undefined) tense.totalAccuracy = accuracy;
         const updated = { ...prev, tenses: { ...prev.tenses, [tenseId]: tense } };
         try {
@@ -193,7 +226,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
 
   const addVocabMastered = useCallback((tenseId: TenseId, word: string) => {
     setProgress((prev) => {
-      const tense = { ...prev.tenses[tenseId] };
+      const tense = { ...(prev.tenses[tenseId] || defaultTenseProgress(tenseId)) };
       if (!tense.vocabMastered.includes(word)) {
         tense.vocabMastered = [...tense.vocabMastered, word];
       }
@@ -209,7 +242,8 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
 
   const incrementSpeaking = useCallback((tenseId: TenseId) => {
     setProgress((prev) => {
-      const tense = { ...prev.tenses[tenseId], speakingAttempts: prev.tenses[tenseId].speakingAttempts + 1 };
+      const tense = { ...(prev.tenses[tenseId] || defaultTenseProgress(tenseId)) };
+      tense.speakingAttempts = (tense.speakingAttempts || 0) + 1;
       const updated = { ...prev, tenses: { ...prev.tenses, [tenseId]: tense } };
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
@@ -222,7 +256,8 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
 
   const incrementWriting = useCallback((tenseId: TenseId) => {
     setProgress((prev) => {
-      const tense = { ...prev.tenses[tenseId], writingSubmissions: prev.tenses[tenseId].writingSubmissions + 1 };
+      const tense = { ...(prev.tenses[tenseId] || defaultTenseProgress(tenseId)) };
+      tense.writingSubmissions = (tense.writingSubmissions || 0) + 1;
       const updated = { ...prev, tenses: { ...prev.tenses, [tenseId]: tense } };
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
@@ -232,6 +267,183 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       return updated;
     });
   }, []);
+
+  // Parts of Speech Handlers
+  const getPartOfSpeechProgress = useCallback(
+    (posId: PartOfSpeechId): PartOfSpeechProgress => {
+      return progress.partsOfSpeech?.[posId] || defaultPartOfSpeechProgress(posId);
+    },
+    [progress]
+  );
+
+  const completePartOfSpeechStage = useCallback(
+    (posId: PartOfSpeechId, stageId: StageId, score?: number, accuracy?: number) => {
+      setProgress((prev) => {
+        const currentPos = prev.partsOfSpeech?.[posId] || defaultPartOfSpeechProgress(posId);
+        const updatedPos: PartOfSpeechProgress = {
+          ...currentPos,
+          stages: {
+            ...currentPos.stages,
+            [stageId]: {
+              completed: true,
+              score,
+              accuracy,
+              completedAt: new Date().toISOString(),
+            },
+          },
+          lastActiveAt: new Date().toISOString(),
+        };
+        updatedPos.overallProgress = calculateOverallProgress(updatedPos.stages);
+        if (accuracy !== undefined) {
+          updatedPos.totalAccuracy = accuracy;
+        }
+        const currentIdx = STAGE_ORDER.indexOf(stageId);
+        if (currentIdx < STAGE_ORDER.length - 1) {
+          updatedPos.currentStage = STAGE_ORDER[currentIdx + 1];
+        }
+
+        const updated: UserProgress = {
+          ...prev,
+          partsOfSpeech: {
+            ...(prev.partsOfSpeech || { noun: defaultPartOfSpeechProgress('noun') }),
+            [posId]: updatedPos,
+          },
+          totalXP: (prev.totalXP || 0) + 15,
+        };
+
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+        } catch {
+          // ignore
+        }
+        return updated;
+      });
+    },
+    []
+  );
+
+  const isPartOfSpeechStageUnlocked = useCallback(
+    (posId: PartOfSpeechId, stageId: StageId): boolean => {
+      if (stageId === 'learn') return true;
+      const pos = progress.partsOfSpeech?.[posId] || defaultPartOfSpeechProgress(posId);
+      const stageIdx = STAGE_ORDER.indexOf(stageId);
+      if (stageIdx <= 0) return true;
+      const prevStage = STAGE_ORDER[stageIdx - 1];
+      return pos.stages[prevStage]?.completed === true;
+    },
+    [progress]
+  );
+
+  const addPartOfSpeechVocabMastered = useCallback((posId: PartOfSpeechId, word: string) => {
+    setProgress((prev) => {
+      const currentPos = prev.partsOfSpeech?.[posId] || defaultPartOfSpeechProgress(posId);
+      if (!currentPos.vocabMastered.includes(word)) {
+        const updatedPos = {
+          ...currentPos,
+          vocabMastered: [...currentPos.vocabMastered, word],
+        };
+        const updated = {
+          ...prev,
+          partsOfSpeech: {
+            ...(prev.partsOfSpeech || { noun: defaultPartOfSpeechProgress('noun') }),
+            [posId]: updatedPos,
+          },
+        };
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+        } catch {
+          // ignore
+        }
+        return updated;
+      }
+      return prev;
+    });
+  }, []);
+
+  const incrementPartOfSpeechSpeaking = useCallback((posId: PartOfSpeechId) => {
+    setProgress((prev) => {
+      const currentPos = prev.partsOfSpeech?.[posId] || defaultPartOfSpeechProgress(posId);
+      const updatedPos = {
+        ...currentPos,
+        speakingAttempts: (currentPos.speakingAttempts || 0) + 1,
+      };
+      const updated = {
+        ...prev,
+        partsOfSpeech: {
+          ...(prev.partsOfSpeech || { noun: defaultPartOfSpeechProgress('noun') }),
+          [posId]: updatedPos,
+        },
+      };
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      } catch {
+        // ignore
+      }
+      return updated;
+    });
+  }, []);
+
+  const incrementPartOfSpeechWriting = useCallback((posId: PartOfSpeechId) => {
+    setProgress((prev) => {
+      const currentPos = prev.partsOfSpeech?.[posId] || defaultPartOfSpeechProgress(posId);
+      const updatedPos = {
+        ...currentPos,
+        writingSubmissions: (currentPos.writingSubmissions || 0) + 1,
+      };
+      const updated = {
+        ...prev,
+        partsOfSpeech: {
+          ...(prev.partsOfSpeech || { noun: defaultPartOfSpeechProgress('noun') }),
+          [posId]: updatedPos,
+        },
+      };
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      } catch {
+        // ignore
+      }
+      return updated;
+    });
+  }, []);
+
+  const recordPartOfSpeechWeakArea = useCallback((posId: PartOfSpeechId, weakArea: string) => {
+    setProgress((prev) => {
+      const currentPos = prev.partsOfSpeech?.[posId] || defaultPartOfSpeechProgress(posId);
+      if (!currentPos.weakAreas.includes(weakArea)) {
+        const updatedPos = {
+          ...currentPos,
+          weakAreas: [...currentPos.weakAreas, weakArea],
+        };
+        const updated = {
+          ...prev,
+          partsOfSpeech: {
+            ...(prev.partsOfSpeech || { noun: defaultPartOfSpeechProgress('noun') }),
+            [posId]: updatedPos,
+          },
+        };
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+        } catch {
+          // ignore
+        }
+        return updated;
+      }
+      return prev;
+    });
+  }, []);
+
+  const resetPartOfSpeech = useCallback(
+    (posId: PartOfSpeechId) => {
+      save({
+        ...progress,
+        partsOfSpeech: {
+          ...(progress.partsOfSpeech || {}),
+          [posId]: defaultPartOfSpeechProgress(posId),
+        },
+      });
+    },
+    [progress, save]
+  );
 
   const setTheme = useCallback(
     (theme: 'light' | 'dark') => {
@@ -246,7 +458,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   );
 
   const getTenseProgress = useCallback(
-    (tenseId: TenseId) => progress.tenses[tenseId],
+    (tenseId: TenseId) => progress.tenses[tenseId] || defaultTenseProgress(tenseId),
     [progress]
   );
 
@@ -254,6 +466,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     (tenseId: TenseId, stageId: StageId): boolean => {
       if (stageId === 'learn') return true;
       const tense = progress.tenses[tenseId];
+      if (!tense) return true;
       const stageIdx = STAGE_ORDER.indexOf(stageId);
       if (stageIdx <= 0) return true;
       const prevStage = STAGE_ORDER[stageIdx - 1];
@@ -327,6 +540,14 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
         updateIELTSLevel,
         logIELTSError,
         addXP,
+        getPartOfSpeechProgress,
+        completePartOfSpeechStage,
+        isPartOfSpeechStageUnlocked,
+        addPartOfSpeechVocabMastered,
+        incrementPartOfSpeechSpeaking,
+        incrementPartOfSpeechWriting,
+        recordPartOfSpeechWeakArea,
+        resetPartOfSpeech,
       }}
     >
       {children}
@@ -339,3 +560,4 @@ export function useProgress() {
   if (!ctx) throw new Error('useProgress must be used inside ProgressProvider');
   return ctx;
 }
+

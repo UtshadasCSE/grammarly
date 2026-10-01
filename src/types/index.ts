@@ -16,14 +16,21 @@ export type TenseId = PresentTenseId | PastTenseId | FutureTenseId | 'mixed';
 
 export type QuestionType =
   | 'fill-blank'
+  | 'guided-fill'
+  | 'challenge-fill'
   | 'multiple-choice'
+  | 'mcq'
   | 'error-correction'
   | 'ielts-context'
   | 'sentence-transformation';
 
 export type DifficultyLevel =
+  | 'zero'
+  | 'beginner'
   | 'basic'
+  | 'easy'
   | 'elementary'
+  | 'medium'
   | 'intermediate'
   | 'upper-intermediate'
   | 'advanced'
@@ -81,7 +88,8 @@ export interface SentencePart {
   text: string;
   role: string;
   explanation: string;
-  color: string;
+  color?: string;
+  partOfSpeech?: string;
 }
 
 export interface TenseFormula {
@@ -160,6 +168,7 @@ export interface TenseProgress {
 
 export interface UserProgress {
   tenses: Record<TenseId, TenseProgress>;
+  partsOfSpeech?: Partial<Record<PartOfSpeechId, PartOfSpeechProgress>>;
   streak: number;
   lastLoginDate: string;
   totalXP: number;
@@ -227,3 +236,228 @@ export interface IELTSMasteryProgress {
   advanced: IELTSLevelProgress;
   errors: IELTSErrorLog[];
 }
+
+// ============================================================
+// Parts of Speech Types (Noun, Pronoun & Verb)
+// ============================================================
+export type PartOfSpeechId = 'noun' | 'pronoun' | 'verb' | 'adjective' | 'adverb' | 'preposition' | 'conjunction' | 'interjection' | 'determiner' | 'article';
+
+export interface NounQuestion {
+  id: string;
+  category: 'parts-of-speech';
+  partOfSpeech: 'noun' | 'pronoun' | 'verb' | 'adjective' | 'adverb' | string;
+  level: DifficultyLevel;
+  type: QuestionType;
+  question: string;
+  sentence?: string;
+  wrongSentence?: string;
+  options?: string[];
+  correctAnswer: string;
+  acceptedAnswers?: string[];
+  explanation: string;
+  simpleExplanation?: string;
+  ieltsExplanation?: string;
+  banglaExplanation?: string;
+  hint1?: string;
+  hint2?: string;
+  hint3?: string;
+  hint4?: string;
+  banglaHint?: string;
+  grammarRule: string;
+  nounRule?: string;
+  pronounRule?: string;
+  verbRule?: string;
+  adjectiveRule?: string;
+  adverbRule?: string;
+  topic?: string;
+  difficulty?: number; // 1-10
+  vocabulary?: string[];
+  targetSkill?: string;
+  ieltsTip?: string;
+  weakAreaTag?: string;
+  weaknessTag?: string;
+  error?: string;
+  correction?: string;
+  learnerError?: string;
+  correctForm?: string;
+  whyMistakeOccurs?: string;
+  whyMistakeHappens?: string;
+  ieltsRelevance?: string;
+  contextSnippet?: string;
+}
+
+export type PronounQuestion = NounQuestion;
+export type VerbQuestion = NounQuestion;
+export type AdjectiveQuestion = NounQuestion;
+export type AdverbQuestion = NounQuestion;
+
+export interface NounLessonSection {
+  id: string;
+  title: string;
+  banglaTitle?: string;
+  level: 'Zero / Beginner' | 'Beginner' | 'Easy' | 'Easy / Medium' | 'Medium' | 'Medium / Core' | 'Medium / Advanced' | 'Advanced' | 'Advanced / IELTS Advanced' | 'IELTS Advanced' | string;
+  description: string;
+  banglaExplanation?: string;
+  rules: string[];
+  examples: { text: string; breakdown: string; note?: string }[];
+  commonMistakes?: { wrong: string; correct: string; reason: string }[];
+  ieltsTips?: string[];
+  miniCheck?: {
+    question: string;
+    options: string[];
+    correctIndex: number;
+    explanation: string;
+    simpleExplanation?: string;
+  };
+}
+
+export type PronounLessonSection = NounLessonSection;
+export type VerbLessonSection = NounLessonSection;
+export type AdjectiveLessonSection = NounLessonSection;
+export type AdverbLessonSection = NounLessonSection;
+
+export interface NounLesson {
+  id: 'noun' | 'pronoun' | 'verb' | 'adjective' | 'adverb' | string;
+  name: string;
+  banglaName: string;
+  subtitle: string;
+  introduction: string;
+  introductionBangla: string;
+  interactiveSentence: SentencePart[];
+  sections: NounLessonSection[];
+}
+
+export type PronounLesson = NounLesson;
+export type VerbLesson = NounLesson;
+export type AdjectiveLesson = NounLesson;
+export type AdverbLesson = NounLesson;
+
+export interface NounVocabItem {
+  id: string;
+  word: string;
+  banglaMeaning: string;
+  definition: string;
+  partOfSpeech: string;
+  pronunciation: string;
+  collocation: string;
+  synonym: string;
+  antonym?: string;
+  beginnerExample: string;
+  advancedExample?: string;
+  ieltsExample: string;
+  targetPronoun?: string;
+  targetVerbPattern?: string;
+  targetAdjectiveType?: string;
+  targetAdverbType?: string;
+  wordFamily?: {
+    noun?: string;
+    verb?: string;
+    adjective?: string;
+    adverb?: string;
+  };
+  nounFormation?: {
+    rootWord: string;
+    rootType: 'verb' | 'adjective' | string;
+    suffix?: string;
+    explanation: string;
+  };
+  adjectiveFormation?: {
+    rootWord: string;
+    rootType: 'noun' | 'verb' | string;
+    suffix?: string;
+    explanation: string;
+  };
+  adverbFormation?: {
+    rootWord: string;
+    rootType: 'adjective' | 'noun' | string;
+    suffix?: string;
+    explanation: string;
+  };
+}
+
+export type PronounVocabItem = NounVocabItem;
+export type VerbVocabItem = NounVocabItem;
+export type AdjectiveVocabItem = NounVocabItem;
+export type AdverbVocabItem = NounVocabItem;
+
+export interface NounSpeakingPrompt {
+  id: string;
+  stage?: number;
+  level: DifficultyLevel;
+  type: 'beginner-naming' | 'describe-scene' | 'describe-place' | 'ielts-part2' | 'ielts-part3' | string;
+  topic?: string;
+  prompt: string;
+  targetGrammar: string;
+  targetNouns?: string[];
+  targetPronouns?: string[];
+  targetVerbs?: string[];
+  targetAdjectives?: string[];
+  targetAdverbs?: string[];
+  targetCollocations?: string[];
+  collocations?: string[];
+  hintStarter: string;
+  sentenceStarter?: string;
+  duration?: number;
+  sampleAnswer?: string;
+  modelResponse?: string;
+  ieltsTips?: string[];
+}
+
+export type PronounSpeakingPrompt = NounSpeakingPrompt;
+export type VerbSpeakingPrompt = NounSpeakingPrompt;
+export type AdjectiveSpeakingPrompt = NounSpeakingPrompt;
+export type AdverbSpeakingPrompt = NounSpeakingPrompt;
+
+export interface NounWritingTask {
+  id: string;
+  stage?: number;
+  level: DifficultyLevel;
+  type: 'sentence-construction' | 'sentence-expansion' | 'short-paragraph' | 'academic-paragraph' | 'ielts-task1' | 'ielts-task2' | string;
+  topic?: string;
+  task?: string;
+  prompt: string;
+  instructions: string;
+  targetGrammar: string;
+  targetAdverbs?: string[];
+  targetAdjectives?: string[];
+  targetVerbs?: string[];
+  grammarFocus?: string;
+  wordLimit?: number;
+  minWords?: number;
+  sampleAnswer?: string;
+  assessmentCriteria: string[];
+  caseStudy?: {
+    original: string;
+    problem: string;
+    correction: string;
+    explanation: string;
+    improvedVersion: string;
+  };
+  sampleAnalysis?: {
+    original: string;
+    problem: string;
+    correction: string;
+    explanation: string;
+    improvedVersion: string;
+  };
+}
+
+export type PronounWritingTask = NounWritingTask;
+export type VerbWritingTask = NounWritingTask;
+export type AdjectiveWritingTask = NounWritingTask;
+export type AdverbWritingTask = NounWritingTask;
+
+export interface PartOfSpeechProgress {
+  id: PartOfSpeechId;
+  currentStage: StageId;
+  stages: Record<StageId, StageProgress>;
+  overallProgress: number; // 0-100
+  totalAccuracy: number;
+  vocabMastered: string[];
+  speakingAttempts: number;
+  writingSubmissions: number;
+  startedAt: string;
+  lastActiveAt: string;
+  weakAreas: string[];
+}
+
